@@ -1,7 +1,6 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
 
-import views
 
 app_name = "news"
 

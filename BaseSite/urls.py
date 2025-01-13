@@ -2,8 +2,6 @@ from django.urls import path
 from django.urls.conf import include
 from django.views.generic.base import TemplateView
 
-import views
-
 app_name = "base"
 
 urlpatterns = [
