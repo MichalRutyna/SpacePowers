@@ -1,0 +1,8 @@
+Django~=4.2.17
+beautifulsoup4~=4.12.3
+soupsieve~=2.6
+pip~=23.2.1
+asgiref~=3.8.1
+sqlparse~=0.5.3
+django-crispy-forms~=2.3
+django-debug-toolbar~=4.4.6
