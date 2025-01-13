@@ -6,3 +6,5 @@ asgiref~=3.8.1
 sqlparse~=0.5.3
 django-crispy-forms~=2.3
 django-debug-toolbar~=4.4.6
+django-bootstrap-v5 ~= 1.0.11
+crispy-bootstrap5 ~= 2024.10
