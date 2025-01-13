@@ -3,3 +3,11 @@
     height: 1em;
     vertical-align: -0.125em;
 }
+
+body {
+    padding-top: 120px;
+}
+
+footer {
+    margin: 5em 0;
+}

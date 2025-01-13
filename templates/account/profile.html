@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Hi {{ user.username }}!</h1>
+        <p><a href="{% url 'b:account:password_change' %}">Password Change</a></p>
+        <form action="{% url 'b:account:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+    {% else %}
+        <p>You are not logged in</p>
+        <p><a href="{% url 'b:account:password_reset' %}">Password Reset</a></p>
+        <p><a href="{% url 'b:account:login' %}">Log In</a></p>
+    {% endif %}
+{% endblock %}
