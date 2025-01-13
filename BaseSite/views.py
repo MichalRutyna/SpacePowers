@@ -1,3 +1,14 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def base(request):
+    context = {'nations': [
+        {
+            'name': "Anglia",
+        },
+        {
+            'name': "Brazil",
+        },
+    ],
+    }
+    return render(request, 'base.html', context)

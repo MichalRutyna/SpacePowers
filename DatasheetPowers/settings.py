@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'Accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +40,11 @@ INSTALLED_APPS = [
     'bootstrap5',
     "crispy_forms",
     "crispy_bootstrap5",
+    'Accounts.apps.AccountsConfig',
+    'Nation.apps.NationConfig',
+    'BaseSite.apps.BasesiteConfig',
+    'OtherNations.apps.OthernationsConfig',
+    'News.apps.NewsConfig'
 ]
 
 MIDDLEWARE = [
@@ -120,6 +124,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

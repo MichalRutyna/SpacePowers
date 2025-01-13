@@ -1,29 +1,73 @@
+{% load bootstrap5 %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Django Auth Tutorial{% endblock %}</title>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
+    <title>{% block title %}DatasheetPowers{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% bootstrap_javascript %}
 </head>
 
 <body>
-<div class="container">
-    <ul class="nav bg-info">
-        <li class="nav-item">
-            <a class="nav-link link-light" href="/">HOME</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link link-light" href="/account/login">MEMBERS</a>
-        </li>
-    </ul>
-</div>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">DP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'b:nation:home' %}">Nation
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'b:account:home' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon">
+                            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                            <path fill="#fff"
+                                  d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'b:news:home' %}">News</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'b:other_nations:home' %}" role="button"
+                       aria-haspopup="true" aria-expanded="false">Other nations</a>
+                    <div class="dropdown-menu">
+                        {% for nation in nations %}
+                            <a class="dropdown-item" href="{% url 'b:other_nations:' %}">{{ nation.name }}</a>
+                        {% endfor %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'b:other_nations:summary' %}">Separated link</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <main>
     {% block content %}
     {% endblock %}
 </main>
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-body-secondary">🚢 Czarostatek sp. z o.o.</p>
+
+    <ul class="nav col-md-4 justify-content-end">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+    </ul>
+</footer>
 </body>
 
 </html>
