@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Nation
+
+
+class NationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'owner']
+
+admin.site.register(Nation, NationAdmin)
