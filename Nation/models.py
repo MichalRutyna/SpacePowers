@@ -3,6 +3,7 @@ from django.db import models
 
 class Nation(models.Model):
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
+    active = models.BooleanField(default=True)
     name = models.CharField(max_length=100)
     population = models.IntegerField()
     PKB = models.IntegerField()
