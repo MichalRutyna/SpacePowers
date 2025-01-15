@@ -13,11 +13,6 @@ class NationDetailView(DetailView):
     model = Nation
     template_name = "nation/foreign_detail.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update(self.object.get_data_as_foreign_nation())
-        return context
-
 class NationSummaryView(ListView):
     model = Nation
     template_name = "nation/foreign_summary.html"

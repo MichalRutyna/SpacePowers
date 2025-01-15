@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Foreign nation: {{ name }}{% endblock %}
+{% block title %}Foreign nation: {{ nation.name }}{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">What we know about {{ name }}:</h1>
+    <h1 class="text-center">What we know about {{ nation.name }}:</h1>
 
-     <h3>Claimant: {{ owner }}</h3>
-    Population: {{ population }} <br>
-    PKB: {{ PKB }} <br>
+     <h3>Claimant: {{ nation.owner }}</h3>
+    Population: {{ nation.population }} <br>
+    PKB: {{ nation.PKB }} <br>
 {% endblock %}
