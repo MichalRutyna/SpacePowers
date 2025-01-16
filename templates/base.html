@@ -13,6 +13,7 @@
 </head>
 
 <body>
+
 <nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="dark">
     <div class="container">
         <a class="navbar-brand" href="/">DP</a>
@@ -30,11 +31,11 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'b:news:home' %}">News</a>
-{#                {% cache 900 dropdown %}#}
+                    {#                {% cache 900 dropdown %}#}
                 <li class="nav-item dropdown">
                     {{ dropdown | safe }}
                 </li>
-{#                {% endcache %}#}
+                {#                {% endcache %}#}
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

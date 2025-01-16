@@ -11,3 +11,19 @@ body {
 footer {
     margin: 5em 0;
 }
+
+.card * {
+    text-decoration: none;
+}
+
+.post:hover {
+    filter: brightness(105%);
+}
+
+.badge:hover {
+    filter: brightness(125%);
+}
+
+.post-title:hover {
+    filter: brightness(80%);
+}

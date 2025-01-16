@@ -1,0 +1,17 @@
+{% extends "news/post_overwiewed.html" %}
+
+{% block title_link %}
+    <h3 class="card-header">
+        <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span>
+    </h3>
+{% endblock %}
+
+{% block content %}
+    <p class="card-text">
+        {{ post.content }}
+    </p>
+{% endblock %}
+
+{% block comments %}
+    {% include 'news/post_comment_section.html' %}
+{% endblock %}

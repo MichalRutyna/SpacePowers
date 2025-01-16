@@ -1,10 +1,8 @@
-from typing import Any, Dict
-from django.db.models.query import QuerySet
 from django.views.generic import ListView, DetailView
 from .models import Post, Category, Tag, Comment
+from Nation.models import Nation
 from django.db.models import F
 from django.core.paginator import Paginator
-from datetime import datetime
 from django.http import JsonResponse
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -43,7 +41,7 @@ class Home(ListView):
 class PostsByCategory(ListView):
     template_name = 'news/category.html'
     context_object_name = 'posts'
-    paginate_by = 4
+    paginate_by = 10
     allow_empty = False
 
     def get_queryset(self):
@@ -57,6 +55,22 @@ class PostsByCategory(ListView):
         context['title'] = Category.objects.get(slug=self.kwargs['slug'])
         return context
 
+class PostsByNation(ListView):
+    template_name = 'news/nation.html'
+    context_object_name = 'posts'
+    paginate_by = 4
+    allow_empty = False
+
+    def get_queryset(self):
+        queryset = Post.objects.filter(nation__slug=self.kwargs['slug']).order_by('-created_at')
+        if not queryset.exists():
+            raise Http404("No posts found from this nation.")
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Nation.objects.get(slug=self.kwargs['slug'])
+        return context
 
 class GetPost(DetailView):
     model = Post

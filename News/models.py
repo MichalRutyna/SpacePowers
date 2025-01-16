@@ -13,7 +13,7 @@ class Category(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={"slug": self.slug})
+        return reverse('b:news:category', kwargs={"slug": self.slug})
 
     class Meta:
         verbose_name = 'Category(s)'
@@ -45,6 +45,7 @@ class Post(models.Model):
     content = models.TextField(blank=True, verbose_name='Content')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Published')
     views = models.IntegerField(default=0, verbose_name='Number of views')
+    likes = models.IntegerField(default=0, verbose_name='Number of likes')
     seen_by = models.ManyToManyField(User, blank=True, verbose_name='Seen by', related_name='+')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tag')

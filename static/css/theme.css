@@ -12186,8 +12186,29 @@ label,
   background-color: #20374c;
 }
 
-.badge-warning, .badge-info {
-  color: #fff;
+.badge-primary {
+  background-color: #df6919;
+}
+.badge-secondary {
+  background-color: #4e5d6c;
+}
+.badge-success {
+  background-color: #5cb85c;
+}
+.badge-info {
+  background-color: #5bc0de;
+}
+.badge-warning {
+  background-color: #ffc107;
+}
+.badge-danger {
+  background-color: #d9534f;
+}
+.badge-light {
+  background-color: #abb6c2;
+}
+.badge-dark {
+  background-color: #20374c;
 }
 
 .tooltip {
