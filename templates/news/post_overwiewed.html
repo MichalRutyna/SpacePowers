@@ -3,26 +3,26 @@
     {% block title_link %}
         <a href="{{ post.get_absolute_url }}">
             <h3 class="card-header text-body post-title">
-                {{ post.title|truncatewords_html:7|safe }}
+                {{ post.title|truncatewords_html:7 }}
             </h3>
 
         </a>
     {% endblock %}
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7|safe }}</a>
+            {% block nation_name %}
+                <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7 }}</a>
+            {% endblock %}
         </h5>
         <h6 class="card-subtitle">
-            {% for tag in post.tags.all %}
-                <a href="{{ tag.get_absolute_url }}" class="badge rounded-pill bg-dark">{{ tag.title }}</a>
-            {% endfor %}
+            {% include "news/post_tag.html" %}
         </h6>
     </div>
     <div class="card-body">
         {% block content %}
-        <p class="card-text">
-            {{ post.content | truncatewords_html:100 }}
-        </p>
+            <p class="card-text">
+                {{ post.content | truncatewords_html:100 }}
+            </p>
         {% endblock %}
     </div>
     <div class="card-body">

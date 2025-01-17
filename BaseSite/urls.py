@@ -2,10 +2,12 @@ from django.urls import path
 from django.urls.conf import include
 from django.views.generic.base import TemplateView
 
+from .views import HomeView
+
 app_name = "base"
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name="home.html"), name="home"),
+    path('',HomeView.as_view(),name="home"),
     path('account/', include("Accounts.urls")),
     path('nation/', include('Nation.urls')),
     path('news/', include('News.urls')),

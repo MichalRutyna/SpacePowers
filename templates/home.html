@@ -3,8 +3,56 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Welcome to DatasheetPowers!</h1>
+    <div class="row">
+        <div class="col-12 col-lg-9">
+            <h1 class="text-center">Welcome to DatasheetPowers!</h1>
 
-    Tabelki jakich mało
+            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut metus et sem laoreet convallis nec at
+                sapien. Nullam a diam rhoncus, placerat magna at, scelerisque arcu. Mauris sed vulputate lorem.
+                Phasellus porta elit vitae bibendum gravida. Sed tempus sagittis urna, non scelerisque augue rutrum et.
+                Cras tempus tempus enim sit amet dapibus. Aliquam lacinia sollicitudin lectus, vel tempor nulla
+                porttitor ac. Curabitur sollicitudin, lacus sit amet efficitur tempor, sapien est venenatis arcu, eu
+                laoreet ante sem sit amet ligula. Nam et risus dictum, tincidunt diam et, sollicitudin nisl.
+            </p>
+            <p>
+                Phasellus sit amet elit porta lectus facilisis lobortis. Aenean blandit neque sed accumsan sagittis.
+                Maecenas at hendrerit metus. Vivamus varius porta dolor quis tempus. Mauris nisl tellus, euismod at nisl
+                nec, scelerisque vehicula velit. Aenean ultricies lobortis libero, ac tincidunt nisi porttitor sed.
+                Aenean
+                sollicitudin tincidunt vulputate. Phasellus sit amet cursus nulla. Vestibulum volutpat venenatis velit
+                ut
+                mattis.
 
+                Curabitur faucibus velit nibh, ut tincidunt augue suscipit ut. Praesent efficitur tempus tempor. Sed
+                neque
+                felis, dictum id imperdiet dapibus, feugiat vitae elit. Donec vitae felis nec justo volutpat venenatis.
+                Morbi tempus ut turpis sed placerat. Nunc semper dolor massa, vitae laoreet odio luctus ac. Suspendisse
+                faucibus, turpis id vulputate mollis, tortor arcu placerat sem, sed tristique nunc elit ullamcorper
+                magna.
+                Aliquam ultricies, lectus eget commodo egestas, tortor enim tincidunt lacus, et ornare lorem turpis
+                luctus
+                lorem. Ut egestas nulla nec dapibus faucibus. Aenean vulputate leo vitae elit pretium mattis. Phasellus
+                condimentum metus in odio rhoncus, ac facilisis erat eleifend.
+            </p>
+            <p>
+                Suspendisse id est id ex viverra scelerisque. Sed fermentum mi purus, vitae tristique nibh euismod ut.
+                Nam faucibus iaculis aliquam. Mauris vel mattis turpis. Morbi consectetur ante vel scelerisque
+                scelerisque. Aliquam ultricies quis ex et euismod. Proin finibus vestibulum turpis vel lobortis.
+
+                Proin elementum semper odio, a finibus turpis ullamcorper a. Sed nec dictum lacus. Sed a tortor ut arcu
+                gravida tempus vel sit amet dolor. Suspendisse tincidunt rhoncus nunc, eu vestibulum lacus. Donec augue
+                dui, porttitor quis sapien vulputate, maximus dapibus metus. Aenean non bibendum turpis. Ut placerat
+                massa sed sapien mollis luctus. Pellentesque dapibus massa quis facilisis fringilla. Pellentesque cursus
+                sollicitudin ante. Maecenas a arcu dapibus, vestibulum ante sit amet, semper tortor. Nulla nisl orci,
+                sollicitudin non metus eget, mollis efficitur diam. Sed eu ultrices sem.
+            </p>
+        </div>
+        <div class="d-block d-lg-none">
+            <br>
+            <h4 class="bg-primary p-2">Latest news:</h4>
+        </div>
+        <div class="col-12 col-lg-3">
+            {% include "news/post_sidebar.html" %}
+        </div>
+    </div>
 {% endblock %}

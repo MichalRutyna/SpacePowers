@@ -6,6 +6,16 @@
     </h3>
 {% endblock %}
 
+{% block nation_name %}
+    <a href="{{ post.nation.get_news_url }}">
+        {{ post.nation|truncatewords_html:7 }}
+    </a>
+    •
+    Posted by <a href="{% url 'b:news:author' post.author.id %}">
+        {{ post.author|truncatewords_html:7 }}
+    </a>
+{% endblock %}
+
 {% block content %}
     <p class="card-text">
         {{ post.content }}

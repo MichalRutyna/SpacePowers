@@ -14,28 +14,10 @@ class Home(ListView):
     model = Post
     template_name = 'news/home.html'
     context_object_name = 'posts'
-    paginate_by = 8
+    paginate_by = 2
 
     def get_queryset(self):
         return Post.objects.order_by('-created_at')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        pinned_post = Post.objects.latest('created_at')
-        pinned_post.views = F('views') + 1
-        if self.request.user.id not in pinned_post.seen_by.all():
-            pinned_post.seen_by.add(self.request.user)
-        pinned_post.save()
-        pinned_post.refresh_from_db()
-        context['pinned_post'] = pinned_post
-
-        # categories = Category.objects.all()
-        # latest_posts_by_category = {}
-        # for category in categories:
-        #     latest_posts_by_category[category.slug] = Post.objects.filter(category=category)[:2]
-        #
-        # context['latest_posts_by_category'] = latest_posts_by_category
-        return context
 
 
 class PostsByCategory(ListView):

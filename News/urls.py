@@ -6,11 +6,12 @@ from .views import *
 app_name = "news"
 
 urlpatterns = [
-    path('', Home.as_view(), name='home'),
-    path('category/<str:slug>/', PostsByCategory.as_view(), name='category'),
-    path('nation/<str:slug>/', PostsByNation.as_view(), name='nation'),
+    path('',Home.as_view(), name='home'),
+    path('category/<str:slug>/',PostsByCategory.as_view(), name='category'),
+    path('nation/<str:slug>/',PostsByNation.as_view(), name='nation'),
     path('tag/<str:slug>/', PostsByTag.as_view(), name='tag'),
-    path('post/<str:slug>/', GetPost.as_view(), name='post'),
-    path('search/', Search.as_view(), name='search'),
-    path('post/<slug:post_id>/add_comment/', add_comment, name='add_comment'),
+    path('author/<int:pk>/', PostsByTag.as_view(), name='author'),
+    path('post/<str:slug>/',GetPost.as_view(), name='post'),
+    path('search/',Search.as_view(), name='search'),
+    path('post/<slug:post_id>/add_comment/',add_comment, name='add_comment'),
 ]

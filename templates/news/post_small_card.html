@@ -1,0 +1,28 @@
+<div class="card">
+    <a href="{{ post.get_absolute_url }}">
+        <h4 class="card-header text-body post-title">
+            {{ post.title|truncatewords_html:7 }}
+        </h4>
+
+    </a>
+    <div class="card-body">
+
+
+        <h6 class="card-subtitle mb-2 text-muted">
+            <a href="{{ post.nation.get_news_url }}">
+                {{ post.nation|truncatewords_html:7 }}
+            </a> •
+            {% include 'news/post_tag.html' %}
+        </h6>
+
+        <p class="card-text">{{ post.content|truncatewords_html:10 }}</p>
+
+
+    </div>
+    <div class="card-footer text-muted m-0">
+                <span class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      data-bs-original-title="{{ post.created_at|date:"d.m.Y G:i" }}">
+                {{ post.created_at|timesince }} ago</span>
+
+    </div>
+</div>
