@@ -1,9 +1,6 @@
-from urllib import request
-
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http.response import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls.base import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView
@@ -11,19 +8,20 @@ from django.template.defaultfilters import slugify
 
 from .forms import *
 
+
 class NationHomeView(View):
     success_template = 'nation/home.html'
     missing_nation_template = 'nation/no_nation.html'
 
     def get(self, request):
         context = {}
-        try:
-            nations = Nation.objects.filter(owner_id=request.user.id)
+        nations = Nation.objects.filter(owner_id=request.user.id)
+        if nations:
             context['nations'] = nations
-        except Nation.DoesNotExist as e:
-            pass
-
-        return render(request, self.success_template, context)
+            return render(request, self.success_template, context)
+        else:
+            context['nation_creation_enabled'] = settings.NATION_CREATION_ALLOWED
+            return render(request, 'nation/no_nation.html', context=context)
 
 
 class NationCreateView(UserPassesTestMixin, CreateView):
@@ -54,4 +52,3 @@ class NationCreateView(UserPassesTestMixin, CreateView):
         form.instance.owner_id = self.request.user.id
         form.instance.slug = slugify(form.cleaned_data['name'])
         return super().form_valid(form)
-

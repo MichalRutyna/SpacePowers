@@ -146,13 +146,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 TESTING = True
 
 if TESTING:
-    INSTALLED_APPS = [
-        *INSTALLED_APPS,
+    INSTALLED_APPS += [
         "debug_toolbar",
     ]
-    MIDDLEWARE = [
+    MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
-        *MIDDLEWARE,
     ]
     INTERNAL_IPS = [
         # ...
@@ -163,4 +161,4 @@ if TESTING:
 
 SIGNUP_ALLOWED = False
 NATION_CREATION_ALLOWED = True
-MAX_NATIONS_PER_USER = 1
+MAX_NATIONS_PER_USER = 2

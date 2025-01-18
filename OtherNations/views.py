@@ -1,7 +1,3 @@
-from django.http.response import HttpResponse
-from django.shortcuts import render
-from django.template.context_processors import request
-from django.urls.base import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 

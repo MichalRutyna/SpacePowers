@@ -9,7 +9,6 @@ from Nation.models import Nation
 
 from django.db.models import F
 from django.core.paginator import Paginator
-from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
 

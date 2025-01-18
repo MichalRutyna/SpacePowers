@@ -5,6 +5,15 @@
 {% block content %}
     <h1 class="text-center">Long live independence!</h1>
 
-    Looks like you don't have any nation claimed. Do you want to <a href="{% url 'b:nation:create' %}">create one</a>?
+    <h4 class="text-warning">
+
+        Looks like you don't have any nation claimed.
+        {% if nation_creation_enabled %}
+            Do you want to <a href="{% url 'b:nation:create' %}">create one</a>?
+        {% else %}
+            Unfortunately nation creation is currently disabled. Wait for a new season or contact the administrator.
+        {% endif %}
+
+    </h4>
 
 {% endblock %}

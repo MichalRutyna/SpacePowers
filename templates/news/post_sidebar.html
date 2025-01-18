@@ -1,6 +1,8 @@
 {% for nation, nation_posts in latest_posts_by_nation.items %}
-    <h3 class="text-center">{{ nation|capfirst }}: </h3>
-    {% for post in nation_posts %}
-        {% include "news/post_small_card.html" %}
-    {% endfor %}
+    {% if nation_posts %}
+        <h3 class="text-center">{{ nation|capfirst }}: </h3>
+        {% for post in nation_posts %}
+            {% include "news/post_small_card.html" %}
+        {% endfor %}
+    {% endif %}
 {% endfor %}
