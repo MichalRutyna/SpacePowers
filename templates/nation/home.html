@@ -1,11 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}{{  nation.name }}{% endblock %}
+{% block title %}{{ nations.first.name }}{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Glory to out nation!</h1>
-    <h2 class="text-center text-warning">{{ nation.name }}</h2>
-    <h3>Claimant: {{ nation.owner }}</h3>
-    Population: {{ nation.population }} <br>
-    PKB: {{ nation.PKB }} <br>
+    {% for nation in nations %}
+        <div class="border-top p-3 bg-dark my-4">
+            <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
+            <h2 class="text-center text-warning">{{ nation.name }}</h2>
+            Population: {{ nation.population }} <br>
+            PKB: {{ nation.PKB }} <br>
+
+            <h2 class="text-danger text-center">Combat forces:</h2>
+            {% if nation.armies.all %}
+                {% for army in nation.armies.all %}
+                    <h4>Army {{ army.name }} of {{ army.nation }}:</h4>
+                    {% for unit in army.units.all %}
+                        - Unit {{ unit.name }} - {{ unit.size }} troops, each costing {{ unit.upkeep_per_unit }} <br>
+                    {% endfor %}
+                    <br><br>
+                {% endfor %}
+            {% else %}
+                <h4>None!</h4>
+            {% endif %}
+
+        </div>
+
+    {% endfor %}
+
+
 {% endblock %}

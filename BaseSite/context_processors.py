@@ -6,7 +6,7 @@ from Nation.models import Nation
 
 def get_nation_dropdown(request):
     if request.user.is_authenticated:
-        nations = Nation.objects.all()
+        nations = Nation.objects.filter(active=True)
         response = ""
 
         response += '<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"\

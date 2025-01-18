@@ -1,15 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
     {% if user.is_authenticated %}
-        <h1>Hi {{ user.username }}!</h1>
+        <h1>Welcome {{ user.username }}, {{ user.claimed_nations.first.owner_title }}
+            of {{ user.claimed_nations.first }}
+            {% if user.claimed_nations.count > 0 %}
+                {% for claim in user.claimed_nations.all|slice:"1:" %}
+                    and {{ claim.owner_title }} of {{ claim }}{% endfor %}{% endif %}!
+        </h1>
+
+         You've been with us since {{ user.date_joined|date:"d.m.Y G:i" }}
+
         <p><a href="{% url 'b:account:password_change' %}" class="btn btn-outline-warning">Password Change</a></p>
         <form action="{% url 'b:account:logout' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Log Out</button>
         </form>
+
     {% else %}
         <h1>Hi!</h1>
-        <h3>You are not logged in</h3>
+        <h3>You are not logged in!</h3>
         <p><a href="{% url 'b:account:login' %}" class="btn btn-lg btn-primary" role="button">Log In</a></p>
+        {% if signup_allowed %}
+            <h3>Do you want to create an account?</h3>
+            <p><a href="{% url 'b:account:signup' %}" class="btn btn-lg btn-primary" role="button">Register</a></p>
+        {% endif %}
     {% endif %}
 {% endblock %}

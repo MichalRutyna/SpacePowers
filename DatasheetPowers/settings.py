@@ -133,6 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "b:account:home"
 
+LOGIN_URL = 'b:account:login'
+
 LOGOUT_REDIRECT_URL = "b:home"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -157,3 +159,8 @@ if TESTING:
         "127.0.0.1",
         # ...
     ]
+
+
+SIGNUP_ALLOWED = False
+NATION_CREATION_ALLOWED = True
+MAX_NATIONS_PER_USER = 1

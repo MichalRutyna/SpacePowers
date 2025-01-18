@@ -5,11 +5,13 @@ from django.urls.base import reverse
 
 class Nation(models.Model):
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='claimed_nations')
+    owner_title = models.CharField(max_length=100, unique=False, null=False, default='glorious leader')
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=255, verbose_name='nation_url', unique=True)
-    active = models.BooleanField(default=True)
-    population = models.IntegerField()
-    PKB = models.IntegerField()
+    active = models.BooleanField(default=False)
+
+    population = models.IntegerField(default=0)
+    PKB = models.IntegerField(default=0)
 
     def get_name_foreign(self):
         # proof of concept for accessing data from other nations
@@ -35,4 +37,39 @@ class Nation(models.Model):
 
     class Meta:
         verbose_name_plural = "Nations"
+        ordering = ['name']
+
+
+class Army(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    nation = models.ForeignKey(Nation, on_delete=models.PROTECT, related_name='armies')
+
+    #location = models.ForeignKey()
+
+    def get_upkeep(self) -> float:
+        return 123.2
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Armies"
+        ordering = ['name']
+
+
+
+class Unit(models.Model):
+    name = models.CharField(max_length=100)
+    army = models.ForeignKey(Army, on_delete=models.PROTECT, related_name='units')
+
+    size = models.IntegerField()
+    upkeep_per_unit = models.IntegerField()
+
+
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "Units"
         ordering = ['name']
