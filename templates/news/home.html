@@ -7,6 +7,14 @@
 
     <h1 class="text-center">Ministry of Foreign Affairs reports:</h1>
 
+    <form action="{% url 'b:news:search' %}" method="get">
+        <div class="py-3 input-group flex-grow-1">
+            <input class="form-control-lg m-0 border-0 flex-grow-1" type="text" name="s" id="" placeholder="Search..."
+                   aria-describedby="search-submit">
+            <input class="btn btn-primary" type="submit" value="Search" id="search-submit">
+        </div>
+    </form>
+
     {% for post in posts %}
         {% include "news/post_overwiewed.html" %}
         <br><br>

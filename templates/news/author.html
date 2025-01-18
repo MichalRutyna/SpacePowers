@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+
 
 {% block title %}News{% endblock %}
 
@@ -8,17 +8,12 @@
 
     <h1 class="text-center">Ministry of Foreign Affairs reports:</h1>
 
-    {% include "news/post_detailed.html" %}
-    <br><br>
+    {% for post in posts %}
+        {% include "news/post_overwiewed.html" %}
+        <br><br>
+    {% endfor %}
 
-    <style>
-        .asteriskField {
-            display: none;
-        }
-    </style>
-    {% crispy form %}
 
-    {#    Bootstrap templates require activation through javascript #}
     <script type='text/javascript'>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         console.log(tooltipTriggerList)

@@ -10,8 +10,8 @@ urlpatterns = [
     path('category/<str:slug>/',PostsByCategory.as_view(), name='category'),
     path('nation/<str:slug>/',PostsByNation.as_view(), name='nation'),
     path('tag/<str:slug>/', PostsByTag.as_view(), name='tag'),
-    path('author/<int:pk>/', PostsByTag.as_view(), name='author'),
+    path('author/<int:pk>/', PostsByAuthor.as_view(), name='author'),
     path('post/<str:slug>/',GetPost.as_view(), name='post'),
     path('search/',Search.as_view(), name='search'),
-    path('post/<slug:post_id>/add_comment/',add_comment, name='add_comment'),
+    path('post/<slug:post_slug>/add_comment/',add_comment, name='add_comment'),
 ]
