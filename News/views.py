@@ -27,8 +27,33 @@ class Home(ListView):
     context_object_name = 'posts'
     paginate_by = 2
 
+    extra_context = {'post_creation_allowed': settings.POST_CREATION_ALLOWED}
+
     def get_queryset(self):
         return Post.objects.order_by('-created_at')
+
+
+class GetPost(DetailView):
+    model = Post
+    template_name = 'news/single.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object.views = F('views') + 1
+        if self.request.user.id not in self.object.seen_by.all():
+            self.object.seen_by.add(self.request.user)
+        self.object.save()
+        self.object.refresh_from_db()
+
+        comments = Comment.objects.filter(post=self.object, is_published=True).order_by('-created_at')
+        paginator = Paginator(comments, 5)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['comments'] = page_obj
+
+        context['form'] = CommentForm()
+        return context
 
 
 class PostsByCategory(ListView):
@@ -64,29 +89,6 @@ class PostsByNation(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['nation'] = Nation.objects.get(slug=self.kwargs['slug'])
-        return context
-
-
-class GetPost(DetailView):
-    model = Post
-    template_name = 'news/single.html'
-    context_object_name = 'post'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        self.object.views = F('views') + 1
-        if self.request.user.id not in self.object.seen_by.all():
-            self.object.seen_by.add(self.request.user)
-        self.object.save()
-        self.object.refresh_from_db()
-
-        comments = Comment.objects.filter(post=self.object, is_published=True).order_by('-created_at')
-        paginator = Paginator(comments, 5)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context['comments'] = page_obj
-
-        context['form'] = CommentForm()
         return context
 
 
@@ -158,7 +160,7 @@ def add_comment(request, post_slug):
                 'comment': 'Invalid input' if not comment_valid else '',
             },
         }
-        #return JsonResponse(response_data)
+        # return JsonResponse(response_data)
         return redirect("b:news:post", slug=post_slug)
 
     comment = Comment(author=request.user, comment=comment_text, nation=nation, post=post)
@@ -172,9 +174,15 @@ def add_comment(request, post_slug):
     }
     return redirect("b:news:post", slug=post_slug)
 
+
 @method_decorator(csrf_protect, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class AddPostView(UserPassesTestMixin, CreateView):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     form_class = PostForm
     template_name = 'news/create_post.html'
     success_url = reverse_lazy("b:news:home")
@@ -183,10 +191,13 @@ class AddPostView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         allowed = True
-        print(self.request.user.user_permissions)
-        if not self.request.user.has_perm('news.add_post'):
+        print(self.request.user.get_all_permissions())
+        if not settings.POST_CREATION_ALLOWED:
             allowed = False
-            self.errors.append('You do not have permission to create a post.')
+            self.errors.append('An administrator has disabled post creation.')
+        if not self.request.user.has_perm('News.add_post'):
+            allowed = False
+            self.errors.append('You do not have the permissions!')
         return allowed
 
     def handle_no_permission(self):
@@ -201,4 +212,3 @@ class AddPostView(UserPassesTestMixin, CreateView):
         form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
         form.instance.roll = random.randint(1, 20)
         return super().form_valid(form)
-

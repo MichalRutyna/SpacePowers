@@ -5,44 +5,53 @@
 
 {% block content %}
 
-    <h1 class="text-center">Ministry of Foreign Affairs reports:</h1>
+    <div class="row">
+        <h1 class="text-center col-12 col-lg-9">Ministry of Foreign Affairs reports:</h1>
 
-    <form action="{% url 'b:news:search' %}" method="get">
-        <div class="py-3 input-group flex-grow-1">
-            <input class="form-control-lg m-0 border-0 flex-grow-1" type="text" name="s" id="" placeholder="Search..."
-                   aria-describedby="search-submit">
-            <input class="btn btn-primary" type="submit" value="Search" id="search-submit">
-        </div>
-    </form>
+        <a href="{% url 'b:news:create_post' %}"
+           class="btn btn-primary col-12 col-lg-3 {% if not post_creation_allowed %} disabled {% endif %}">
+            Create a post</a>
+    </div>
+    <div class="row">
+        <form class="p-0" action="{% url 'b:news:search' %}" method="get">
+            <div class="py-3 input-group flex-grow-1">
+                <input class="form-control-lg m-0 border-0 flex-grow-1" type="text" name="s" id=""
+                       placeholder="Search..."
+                       aria-describedby="search-submit">
+                <input class="btn btn-primary" type="submit" value="Search" id="search-submit">
+            </div>
+        </form>
+    </div>
+    <div class="row">
 
-    {% for post in posts %}
-        {% include "news/components/post_overwiewed.html" %}
-        <br><br>
-    {% endfor %}
+        {% for post in posts %}
+            {% include "news/components/post_overwiewed.html" %}
+        {% endfor %}
 
-    {% if page_obj.has_other_pages %}
-        <ul class="pagination d-flex justify-content-center">
-            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
-                <a class="page-link"
-                        {% if page_obj.has_previous %} href="?page={{ page_obj.previous_page_number }}" {% endif %}
-                   tabindex="-1">
-                    &laquo;</a>
-            </li>
-            {% for p in page_obj.paginator.page_range %}
-                {% if p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
-                    <li class="page-item {% if page_obj.number == p %}disabled{% endif %}">
-                        <a class="page-link" href="?page={{ p }}">{{ p }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-                <a class="page-link"
-                        {% if page_obj.has_next %} href="?page={{ page_obj.next_page_number }}" {% endif %}>
-                    &raquo;</a>
-            </li>
-        </ul>
-    {% endif %}
+        {% if page_obj.has_other_pages %}
+            <ul class="pagination d-flex justify-content-center">
+                <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                    <a class="page-link"
+                            {% if page_obj.has_previous %} href="?page={{ page_obj.previous_page_number }}" {% endif %}
+                       tabindex="-1">
+                        &laquo;</a>
+                </li>
+                {% for p in page_obj.paginator.page_range %}
+                    {% if p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                        <li class="page-item {% if page_obj.number == p %}disabled{% endif %}">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                    <a class="page-link"
+                            {% if page_obj.has_next %} href="?page={{ page_obj.next_page_number }}" {% endif %}>
+                        &raquo;</a>
+                </li>
+            </ul>
+        {% endif %}
 
+    </div>
     <script type='text/javascript'>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         console.log(tooltipTriggerList)

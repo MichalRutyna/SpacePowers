@@ -1,11 +1,13 @@
 {% extends "news/components/post_overwiewed.html" %}
 
+{# Title no longer links to the post #}
 {% block title_link %}
     <h3 class="card-header">
         <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span>
     </h3>
 {% endblock %}
 
+{# Title now has author #}
 {% block nation_name %}
     <a href="{{ post.nation.get_news_url }}">
         {{ post.nation|truncatewords_html:7 }}
@@ -16,12 +18,14 @@
     </a>
 {% endblock %}
 
+{# content is no longer truncated #}
 {% block content %}
     <p class="card-text">
         {{ post.content }}
     </p>
 {% endblock %}
 
+{# include comment section #}
 {% block comments %}
     {% include 'news/components/post_comment_section.html' %}
 {% endblock %}

@@ -3,6 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Reset
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
+from Nation.models import Nation
 from .models import Tag, Post
 
 
@@ -29,6 +30,7 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'content', 'nation', 'tags')
 
+
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -36,7 +38,7 @@ class PostForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = 'create_post/'
 
-        self.user = user
+        self.fields['nation'].queryset = Nation.objects.filter(owner=user)
 
         self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
         self.helper.add_input(Submit('submit', "Comment", css_class='btn-primary'))

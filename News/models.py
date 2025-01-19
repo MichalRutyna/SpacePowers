@@ -41,7 +41,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name='Name')
     slug = models.SlugField(max_length=255, unique=True, verbose_name='Link')
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, verbose_name='Author')
-    nation = models.ForeignKey(Nation, on_delete=models.PROTECT, null=True, verbose_name='Nation')
+    nation = models.ForeignKey(Nation, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Nation')
     content = models.TextField(blank=True, verbose_name='Content')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Published')
     views = models.IntegerField(default=0, verbose_name='Number of views')
