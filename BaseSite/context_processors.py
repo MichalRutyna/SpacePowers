@@ -19,8 +19,8 @@ def get_nation_dropdown(request):
 
             response += f"<a class='dropdown-item' href='{url}'>{name}</a>"
         summary_url = reverse_lazy('b:other_nations:summary')
-        response += f'<div class="dropdown-divider"></div>\
-                    <a class="dropdown-item" href="{summary_url}">Summary</a></div>'
+        # response += f'<div class="dropdown-divider"></div>\
+        #             <a class="dropdown-item" href="{summary_url}">Summary</a></div>'
 
         return {'dropdown': response}
     else:

@@ -154,7 +154,21 @@ def like_post(request, pk):
         headers = {
             "HX-Refresh": "true"
         }
-        return HttpResponse(str(post.likes), headers=headers)
+        return HttpResponse("", headers=headers)
+
+def like_comment(request, pk):
+    if request.method == 'POST':
+        comment = get_object_or_404(Comment, pk=pk)
+        if request.user.is_authenticated:
+            if comment.liked_by.filter(id=request.user.id).exists():
+                comment.liked_by.remove(request.user)
+            else:
+                comment.liked_by.add(request.user)
+        headers = {
+            "HX-Refresh": "true"
+        }
+        return HttpResponse("", headers=headers)
+
 
 @csrf_protect
 @require_POST

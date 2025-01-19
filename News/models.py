@@ -75,10 +75,18 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', related_query_name='comments', verbose_name='Post')
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, verbose_name='Author')
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, null=True, verbose_name='Nation')
+    liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_comments')
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
     metagame = models.BooleanField(default=False)
+
+    @property
+    def likes(self):
+        return self.liked_by.count()
+
+    def is_liked_by(self, user):
+        return self.liked_by.filter(id=user).exists()
 
     def __str__(self):
         return f"{self.author} commented: {self.comment}"

@@ -9,6 +9,7 @@ urlpatterns = [
     path('',Home.as_view(), name='home'),
     path('post/<str:slug>/',GetPost.as_view(), name='post'),
     path('post/like/<int:pk>/', like_post, name='like_post'),
+    path('comment/like/<int:pk>/', like_comment, name='like_comment'),
     path('category/<str:slug>/',PostsByCategory.as_view(), name='category'),
     path('nation/<str:slug>/',PostsByNation.as_view(), name='nation'),
     path('tag/<str:slug>/', PostsByTag.as_view(), name='tag'),
