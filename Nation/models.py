@@ -63,8 +63,8 @@ class Unit(models.Model):
     name = models.CharField(max_length=100)
     army = models.ForeignKey(Army, on_delete=models.PROTECT, related_name='units')
 
-    size = models.IntegerField()
-    upkeep_per_unit = models.IntegerField()
+    size = models.IntegerField(default=0)
+    upkeep_per_unit = models.IntegerField(default=0)
 
 
 

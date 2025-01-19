@@ -75,6 +75,8 @@ def change_to_field(request, nation_slug, field, cnt=0):
         ans += f'<label for="{field}">{field_object.verbose_name}:</label>\
                <input type="text" id="{field}" name="{field}" value="{value}">'
         return HttpResponse(ans)
+
+
     elif request.method == "POST":
         error = ""
         try:
@@ -93,11 +95,19 @@ def change_to_field(request, nation_slug, field, cnt=0):
 
 
 @csrf_protect
-def change_variable_model_field(request, model_name, pk):
+def change_variable_model_field(request, parent_id, model_name, pk):
+    model = apps.get_model(app_label='Nation', model_name=model_name)
     if request.method == "GET":
         ans = ""
-        model = apps.get_model(app_label='Nation', model_name=model_name)
-        instance = model.objects.get(pk=pk)
+        try:
+            instance = model.objects.get(pk=pk)
+        except model.DoesNotExist:
+            print(model_name)
+            if model_name == "army":
+                instance = model.objects.create(nation=Nation.objects.get(pk=parent_id))
+            elif model_name == "unit":
+                instance = model.objects.create(army=Army.objects.get(pk=parent_id))
+
         for field in model._meta.get_fields():
             if field.is_relation:
                 continue
@@ -107,23 +117,33 @@ def change_variable_model_field(request, model_name, pk):
                 # Future feature - change army allegiance
                 continue
             value = getattr(instance, field.name)
+            print("ajdi", instance.id)
             ans += f'<label for="{field.name}">{field.verbose_name.capitalize()}:</label>\
                            <input type="text" id="{field.name}" name="{field.name}" value="{value}"> '
-        ans += '<input type="submit" hidden />'
+        ans += f'<input type="submit" hidden /><input type="number" hidden value="{instance.id}" name="id"/>'
         return HttpResponse(ans)
+
+
     elif request.method == "POST":
         error = ""
         try:
-            model = apps.get_model(app_label='Nation', model_name=model_name)
-            instance = model.objects.get(pk=pk)
+            try:
+                instance = model.objects.get(pk=pk)
+            except model.DoesNotExist:
+                instance = model.objects.get(pk=int(request.POST['id']))
             print(request.POST)
             for field, value in request.POST.items():
                 if field == "csrfmiddlewaretoken":
                     continue
                 setattr(instance, field, value)
+            try:
+                setattr(instance, 'slug', slugify(request.POST['name']))
+            except Exception as e:
+                pass
             instance.save()
-        except ValueError:
+        except ValueError as e:
             error = "Invalid value!"
+            print(e)
         if error:
             messages.error(request, error)
 

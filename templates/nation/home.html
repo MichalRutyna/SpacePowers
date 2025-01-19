@@ -32,23 +32,23 @@
                 {% endwith %}
 
                 <h2 class="text-danger text-center">Combat forces:</h2>
-                {% if nation.armies.all %}
                     {% for army in nation.armies.all %}
-                        {% with index=army.pk model_name='army' %}
+                        {% with index=army.pk model_name='army' parent=nation.id %}
                             {% include "nation/components/armies_field.html" %}
                         {% endwith %}
-                        {% for unit in army.units.all %}
-                            {% with index=unit.pk model_name='unit' %}
-                                {% include "nation/components/unit_field.html" %}
+                            {% for unit in army.units.all %}
+                                {% with index=unit.pk model_name='unit' parent=army.id %}
+                                    {% include "nation/components/unit_field.html" %}
+                                {% endwith %}
+                            {% endfor %}
+                            {% with index=0 model_name='unit' parent=army.id %}
+                                {% include "nation/components/none_field.html" %}
                             {% endwith %}
-                        {% endfor %}
                         <br><br>
                     {% endfor %}
-                {% else %}
-                        {% with index=0 model_name='army' %}
-                            {% include "nation/components/none_field.html" %}
-                        {% endwith %}
-                {% endif %}
+                    {% with index=0 model_name='army' parent=nation.id %}
+                        {% include "nation/components/none_field.html" %}
+                    {% endwith %}
                 </div>
 
             {% endautoescape %}
