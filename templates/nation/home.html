@@ -1,31 +1,57 @@
 {% extends "base.html" %}
 
+{% load editable_field %}
+
 {% block title %}{{ nations.first.name }}{% endblock %}
 
 {% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     {% for nation in nations %}
         <div class="border-top p-3 bg-dark my-4">
-            <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
-            <h2 class="text-center text-warning">{{ nation.name }}</h2> <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an administrator</h2>
 
-            Population: {{ nation.population }} <br>
-            PKB: {{ nation.PKB }} <br>
+            {% autoescape off %}
+                <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
+                <h2 class="text-center text-body bg-primary">{{ nation.name }}</h2>
+                {% if not nation.active %}
+                    <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
+                        administrator</h2>
+                {% endif %}
 
-            <h2 class="text-danger text-center">Combat forces:</h2>
-            {% if nation.armies.all %}
-                {% for army in nation.armies.all %}
-                    <h4>Army {{ army.name }} of {{ army.nation }}:</h4>
-                    {% for unit in army.units.all %}
-                        - Unit {{ unit.name }} - {{ unit.size }} troops, each costing {{ unit.upkeep_per_unit }} <br>
+                {% with 'PKB' as field_slug %}
+                    {% include "nation/components/pkb_field.html" %}
+                {% endwith %}
+
+                {% with 'population' as field_slug %}
+                    {% include "nation/components/population_field.html" %}
+                {% endwith %}
+
+                <h2 class="text-danger text-center">Combat forces:</h2>
+                {% if nation.armies.all %}
+                    {% for army in nation.armies.all %}
+                        {% with index=army.pk model_name='army' %}
+                            {% include "nation/components/armies_field.html" %}
+                        {% endwith %}
+                        {% for unit in army.units.all %}
+                            {% with index=unit.pk model_name='unit' %}
+                                {% include "nation/components/unit_field.html" %}
+                            {% endwith %}
+                        {% endfor %}
+                        <br><br>
                     {% endfor %}
-                    <br><br>
-                {% endfor %}
-            {% else %}
-                <h4>None!</h4>
-            {% endif %}
+                {% else %}
+                        {% with index=0 model_name='army' %}
+                            {% include "nation/components/none_field.html" %}
+                        {% endwith %}
+                {% endif %}
+                </div>
 
-        </div>
-
+            {% endautoescape %}
     {% endfor %}
 
 

@@ -18,6 +18,49 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 import os
+import logging.config
+from django.utils.log import DEFAULT_LOGGING
+
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            # exact format is not important, this is the minimum information
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        },
+        'django.server': DEFAULT_LOGGING['formatters']['django.server'],
+    },
+    'handlers': {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            'formatter': 'default',
+        },
+        # console logs to stderr
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+        'django.server': DEFAULT_LOGGING['handlers']['django.server'],
+    },
+    'loggers': {
+        # default for all undefined Python modules
+        '': {
+            'level': 'WARNING',
+            'handlers': ['console'],
+        },
+        # Our application code
+        'Nation': {
+            'level': "DEBUG",
+            'handlers': ['console', 'file'],
+            # Avoid double logging because of root logger
+            'propagate': False,
+        },
+        # Default runserver request logging
+        'django.server': DEFAULT_LOGGING['loggers']['django.server'],
+    },
+})
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
@@ -157,7 +200,6 @@ if TESTING:
         "127.0.0.1",
         # ...
     ]
-
 
 SIGNUP_ALLOWED = True
 

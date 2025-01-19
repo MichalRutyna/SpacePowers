@@ -10,8 +10,8 @@ class Nation(models.Model):
     slug = models.SlugField(max_length=255, verbose_name='nation_url', unique=True)
     active = models.BooleanField(default=False)
 
-    population = models.IntegerField(default=0)
-    PKB = models.IntegerField(default=0)
+    population = models.IntegerField(default=0, verbose_name='Population')
+    PKB = models.IntegerField(default=0, verbose_name='PKB')
 
     def get_name_foreign(self):
         # proof of concept for accessing data from other nations
@@ -43,7 +43,7 @@ class Nation(models.Model):
 class Army(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
-    nation = models.ForeignKey(Nation, on_delete=models.PROTECT, related_name='armies')
+    nation = models.ForeignKey(Nation, on_delete=models.PROTECT, related_name='armies', verbose_name='allegiance')
 
     #location = models.ForeignKey()
 
@@ -54,7 +54,7 @@ class Army(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "Armies"
+        verbose_name_plural = "armies"
         ordering = ['name']
 
 
