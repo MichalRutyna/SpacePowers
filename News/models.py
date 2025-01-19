@@ -45,12 +45,19 @@ class Post(models.Model):
     content = models.TextField(blank=True, verbose_name='Content')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Published')
     views = models.IntegerField(default=0, verbose_name='Number of views')
-    likes = models.IntegerField(default=0, verbose_name='Number of likes')
     seen_by = models.ManyToManyField(User, blank=True, verbose_name='Seen by', related_name='+')
+    liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_posts')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tag')
     roll = models.IntegerField(default=-1, verbose_name='Roll')
     is_published = models.BooleanField(default=False)
+
+    @property
+    def likes(self):
+        return self.liked_by.count()
+
+    def is_liked_by(self, user):
+        return self.liked_by.filter(id=user).exists()
 
     def __str__(self):
         return self.title

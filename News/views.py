@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.http.response import HttpResponse
 from django.template.defaultfilters import slugify, random
 from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -141,6 +142,19 @@ class Search(ListView):
         context['search'] = self.request.GET.get('s')
         return context
 
+
+def like_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        if request.user.is_authenticated:
+            if post.liked_by.filter(id=request.user.id).exists():
+                post.liked_by.remove(request.user)
+            else:
+                post.liked_by.add(request.user)
+        headers = {
+            "HX-Refresh": "true"
+        }
+        return HttpResponse(str(post.likes), headers=headers)
 
 @csrf_protect
 @require_POST
