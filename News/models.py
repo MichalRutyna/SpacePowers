@@ -50,7 +50,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tag')
     roll = models.IntegerField(default=-1, verbose_name='Roll')
-    is_published = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

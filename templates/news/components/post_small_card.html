@@ -12,7 +12,7 @@
             <a href="{{ post.nation.get_news_url }}">
                 {{ post.nation|truncatewords_html:7 }}
             </a> •
-            {% include 'news/post_tag.html' %}
+            {% include 'news/components/post_tags.html' %}
         </h6>
 
         <p class="card-text">{{ post.content|truncatewords_html:10 }}</p>

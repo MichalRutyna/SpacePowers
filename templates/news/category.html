@@ -6,10 +6,10 @@
 {% block content %}
 
 
-    <h1 class="text-center">Ministry of Foreign Affairs reports:</h1>
+    <h1 class="text-center">News categorized as {{ category }}:</h1>
 
     {% for post in posts %}
-        {% include "news/post_overwiewed.html" %}
+        {% include "news/components/post_overwiewed.html" %}
         <br><br>
     {% endfor %}
 

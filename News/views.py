@@ -1,9 +1,17 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify, random
+from django.urls.base import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
+from django.views.generic.base import View
+from django.views.generic.edit import CreateView
 
-from .forms import CommentForm
+import settings
+from .forms import CommentForm, PostForm
 from .models import Post, Category, Tag, Comment
 from Nation.models import Nation
 
@@ -37,7 +45,7 @@ class PostsByCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Category.objects.get(slug=self.kwargs['slug'])
+        context['category'] = Category.objects.get(slug=self.kwargs['slug'])
         return context
 
 
@@ -55,7 +63,7 @@ class PostsByNation(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Nation.objects.get(slug=self.kwargs['slug'])
+        context['nation'] = Nation.objects.get(slug=self.kwargs['slug'])
         return context
 
 
@@ -100,7 +108,7 @@ class PostsByTag(ListView):
         return context
 
 
-class PostsByAuthor(ListView):
+class PostsByAuthor(View):
     template_name = 'news/author.html'
     context_object_name = 'posts'
     paginate_by = 4
@@ -134,6 +142,7 @@ class Search(ListView):
 
 @csrf_protect
 @require_POST
+@login_required
 def add_comment(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
     username = request.user.username
@@ -162,3 +171,34 @@ def add_comment(request, post_slug):
         'comment': comment.comment,
     }
     return redirect("b:news:post", slug=post_slug)
+
+@method_decorator(csrf_protect, name='dispatch')
+@method_decorator(login_required, name='dispatch')
+class AddPostView(UserPassesTestMixin, CreateView):
+    form_class = PostForm
+    template_name = 'news/create_post.html'
+    success_url = reverse_lazy("b:news:home")
+
+    errors = []
+
+    def test_func(self):
+        allowed = True
+        print(self.request.user.user_permissions)
+        if not self.request.user.has_perm('news.add_post'):
+            allowed = False
+            self.errors.append('You do not have permission to create a post.')
+        return allowed
+
+    def handle_no_permission(self):
+        context = {"error": "forbidden",
+                   "message": "You cannot create a post!<br>" + self.errors[0]}
+
+        return render(self.request, 'errors/forbidden.html', context)
+
+    def form_valid(self, form):
+        form.instance.slug = slugify(form.cleaned_data['name'])
+        form.instance.author = self.request.user
+        form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
+        form.instance.roll = random.randint(1, 20)
+        return super().form_valid(form)
+

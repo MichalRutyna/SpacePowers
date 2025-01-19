@@ -1,4 +1,4 @@
-{% extends "news/post_overwiewed.html" %}
+{% extends "news/components/post_overwiewed.html" %}
 
 {% block title_link %}
     <h3 class="card-header">
@@ -23,5 +23,5 @@
 {% endblock %}
 
 {% block comments %}
-    {% include 'news/post_comment_section.html' %}
+    {% include 'news/components/post_comment_section.html' %}
 {% endblock %}

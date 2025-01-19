@@ -2,7 +2,7 @@
     {% if nation_posts %}
         <h3 class="text-center">{{ nation|capfirst }}: </h3>
         {% for post in nation_posts %}
-            {% include "news/post_small_card.html" %}
+            {% include "news/components/post_small_card.html" %}
         {% endfor %}
     {% endif %}
 {% endfor %}
