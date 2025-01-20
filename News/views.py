@@ -11,7 +11,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView
 
-import settings
+from django.conf import settings
 from .forms import CommentForm, PostForm
 from .models import Post, Category, Tag, Comment
 from Nation.models import Nation

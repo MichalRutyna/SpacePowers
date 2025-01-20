@@ -1,4 +1,3 @@
-from django.db.models.expressions import F
 from django.shortcuts import render
 from django.views.generic.base import View
 

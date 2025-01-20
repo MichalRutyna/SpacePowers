@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, \
     PasswordChangeView
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -6,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 
-import DatasheetPowers.settings as settings
+from django.conf import settings
 from .forms import password_reset_form, signup_form, login_form, password_change_form
 
 
