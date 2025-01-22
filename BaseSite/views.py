@@ -7,15 +7,17 @@ from Nation.models import Nation
 class HomeView(View):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = {}
-        pinned_post = Post.objects.latest('created_at')
-        pinned_post.save()
-        pinned_post.refresh_from_db()
+        pinned_post = None
+        try:
+            pinned_post = Post.objects.latest('created_at')
+        except Post.DoesNotExist:
+            pass
         context['pinned_post'] = pinned_post
 
         nations = Nation.objects.all()
         latest_posts_by_nation = {}
         for nation in nations:
-            latest_posts_by_nation[nation.slug] = Post.objects.filter(nation=nation)[:2]
+            latest_posts_by_nation[nation.name] = Post.objects.filter(nation=nation)[:2]
 
         context['latest_posts_by_nation'] = latest_posts_by_nation
         return context

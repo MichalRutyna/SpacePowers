@@ -7,5 +7,8 @@ from django.contrib.auth.models import Group
 def user_to_inactive(sender, instance, created, update_fields, **kwargs):
     if created:
         #instance.active = False
-        my_group = Group.objects.get(name='Confirmed User')
-        my_group.user_set.add(instance)
+        try:
+            my_group = Group.objects.get(name='Confirmed User')
+            my_group.user_set.add(instance)
+        except Group.DoesNotExist:
+            pass

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
-from django.template.defaultfilters import slugify, random
+from django.template.defaultfilters import slugify
 from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
@@ -20,6 +20,8 @@ from django.db.models import F
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
+
+import random
 
 
 class Home(ListView):
@@ -219,7 +221,6 @@ class AddPostView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         allowed = True
-        print(self.request.user.get_all_permissions())
         if not settings.POST_CREATION_ALLOWED:
             allowed = False
             self.errors.append('An administrator has disabled post creation.')
@@ -235,7 +236,7 @@ class AddPostView(UserPassesTestMixin, CreateView):
         return render(self.request, 'errors/forbidden.html', context)
 
     def form_valid(self, form):
-        form.instance.slug = slugify(form.cleaned_data['name'])
+        form.instance.slug = slugify(form.cleaned_data['title'])
         form.instance.author = self.request.user
         form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
         form.instance.roll = random.randint(1, 20)
