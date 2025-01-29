@@ -20,6 +20,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Nation" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/News" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/OtherNations" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Map" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/etc" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (DatasheetPowers)" jdkType="Python SDK" />

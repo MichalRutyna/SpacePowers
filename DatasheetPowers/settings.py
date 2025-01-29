@@ -86,7 +86,8 @@ INSTALLED_APPS = [
     'Nation.apps.NationConfig',
     'BaseSite.apps.BasesiteConfig',
     'OtherNations.apps.OthernationsConfig',
-    'News.apps.NewsConfig'
+    'News.apps.NewsConfig',
+    'Map.apps.MapConfig'
 ]
 
 MIDDLEWARE = [
@@ -168,6 +169,12 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+UPLOAD_ROOT = (
+    BASE_DIR
+)
+
+UPLOAD_URL = 'static/photos/uploads/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

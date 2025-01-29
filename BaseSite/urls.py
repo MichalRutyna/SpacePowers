@@ -12,4 +12,5 @@ urlpatterns = [
     path('nation/', include('Nation.urls')),
     path('news/', include('News.urls')),
     path('other_nation/', include('OtherNations.urls')),
+    path('map', include('Map.urls')),
 ]

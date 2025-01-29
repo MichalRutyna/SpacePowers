@@ -33,11 +33,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'b:news:home' %}">News</a>
-                    {#                {% cache 900 dropdown %}#}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'b:map:home' %}">Map</a>
+                </li>
                 <li class="nav-item dropdown">
                     {{ dropdown | safe }}
                 </li>
-                {#                {% endcache %}#}
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

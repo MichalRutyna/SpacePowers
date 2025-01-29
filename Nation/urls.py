@@ -6,6 +6,8 @@ from .views import *
 
 app_name = "nation"
 
+# TODO make single nation sites
+
 urlpatterns = [
     path('', NationHomeView.as_view(), name="home"),
     path('create/', NationCreateView.as_view(), name="create"),
