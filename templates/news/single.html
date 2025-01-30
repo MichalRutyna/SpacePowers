@@ -16,7 +16,10 @@
             display: none;
         }
     </style>
+
+{% if user.is_authenticated %}
     {% crispy form %}
+{% endif %}
 
     {#    Bootstrap templates require activation through javascript #}
     <script type='text/javascript'>

@@ -1,4 +1,4 @@
-<form class="d-flex border-bottom" action="{% url "b:nation:edit" nation.slug field_slug %}" method="post">
+<form class="d-flex border-bottom" action="{% url "b:nation:edit" nation.slug field_slug %}" method="post" hx-headers='{"X-CSRFToken": "{{csrf_token}}"}'>
     {% csrf_token %}
     <span class="me-auto" id="editable">
         {% block field_text %}{% endblock %}
@@ -13,4 +13,8 @@
                       stroke-linejoin="round"/>
             </svg>
         </span>
+
+<!--    <span hx-delete="{% url "b:nation:edit" nation.slug field_slug %}" hx-swap="none" >-->
+<!--        |X-->
+<!--    </span>-->
 </form>
