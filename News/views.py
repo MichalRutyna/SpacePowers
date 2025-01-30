@@ -44,8 +44,9 @@ class GetPost(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         self.object.views = F('views') + 1
-        if self.request.user.id not in self.object.seen_by.all():
-            self.object.seen_by.add(self.request.user)
+        if self.request.user.is_authenticated:
+            if self.request.user.id not in self.object.seen_by.all():
+                self.object.seen_by.add(self.request.user)
         self.object.save()
         self.object.refresh_from_db()
 

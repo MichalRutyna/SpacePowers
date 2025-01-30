@@ -8,6 +8,8 @@ from django.urls.base import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView
 
+from django.contrib.auth.decorators import login_required
+
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
@@ -66,13 +68,14 @@ class NationCreateView(UserPassesTestMixin, CreateView):
 
 
 @csrf_protect
+@login_required
 def change_to_field(request, nation_slug, field, cnt=0):
     ans = ""
     if request.method == "GET":
         value = getattr(Nation.objects.get(slug=nation_slug), field)
-        field_object = value.first()
+        field_obj = Nation._meta.get_field(field)
 
-        ans += f'<label for="{field}">{field_object.verbose_name}:</label>\
+        ans += f'<label for="{field}">{field_obj.verbose_name}:</label>\
                <input type="text" id="{field}" name="{field}" value="{value}">'
         return HttpResponse(ans)
 
@@ -95,6 +98,7 @@ def change_to_field(request, nation_slug, field, cnt=0):
 
 
 @csrf_protect
+@login_required
 def change_variable_model_field(request, parent_id, model_name, pk):
     model = apps.get_model(app_label='Nation', model_name=model_name)
     if request.method == "GET":
@@ -149,3 +153,21 @@ def change_variable_model_field(request, parent_id, model_name, pk):
 
         logger.info(f"{request.user} submitted {request.POST} for {model_name} of pk {pk}")
         return redirect(reverse_lazy("b:nation:home"), extra_context={'error': error})
+
+    elif request.method == "DELETE":
+        error = ""
+        try:
+            instance = model.objects.get(pk=pk)
+        except model.DoesNotExist:
+            error = "Delete on not existing object"
+            return
+        try:
+            instance.delete()
+        except Exception as e:
+            pass
+        if error:
+            messages.error(request, error)
+
+        logger.info(f"{request.user} deleted {request.POST} for {model_name} of pk {pk}")
+        return HttpResponse("")
+
