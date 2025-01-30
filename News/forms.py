@@ -36,9 +36,9 @@ class PostForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_id = 'id-create-post-form'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'create_post/'
+        self.helper.form_action = ''
 
         self.fields['nation'].queryset = Nation.objects.filter(owner=user)
 
         self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
-        self.helper.add_input(Submit('submit', "Comment", css_class='btn-primary'))
+        self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))

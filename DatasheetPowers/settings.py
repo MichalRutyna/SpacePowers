@@ -62,7 +62,8 @@ logging.config.dictConfig({
     },
 })
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+#SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = "saddsdad32nionf09409ms"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -210,7 +211,7 @@ if TESTING:
 
 SIGNUP_ALLOWED = True
 
-POST_CREATION_ALLOWED = False
+POST_CREATION_ALLOWED = True
 
 NATION_CREATION_ALLOWED = True
 MAX_NATIONS_PER_USER = 2
