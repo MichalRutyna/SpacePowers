@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load editable_field %}
+
+{% block title %}{{ nation.name }}{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="border-top p-3 bg-dark my-4">
+
+        {% autoescape off %}
+            <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
+            <h2 class="text-center text-body bg-primary">{{ nation.name }}</h2>
+            {% if not nation.active %}
+                <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
+                    administrator</h2>
+            {% endif %}
+            {% with field_slugs='["PKB"]' model_slug='nation' instance_pk=nation.pk %}
+                {% include "nation/components/specialisations/pkb_field.html" %}
+            {% endwith %}
+
+            {% with field_slugs='["population"]' model_slug='nation' instance_pk=nation.pk %}
+                {% include "nation/components/specialisations/population_field.html" %}
+            {% endwith %}
+
+            <h2 class="text-danger text-center">Combat forces:</h2>
+            {% for army in nation.armies.all %}
+                {% with field_slugs='["name"]' model_slug='army' instance_pk=army.pk %}
+                    {% include "nation/components/specialisations/armies_field.html" %}
+                {% endwith %}
+                {% for unit in army.units.all %}
+                    {% with field_slugs='["name", "size", "upkeep_per_unit"]' model_slug='unit' instance_pk=unit.pk %}
+                        {% include "nation/components/specialisations/unit_field.html" %}
+                    {% endwith %}
+                {% endfor %}
+{#                {% with field_slugs='["population"]' model_slug='nation' instance_pk=nation.pk %}#}
+{#                    {% include "nation/components/specialisations/none_field.html" %}#}
+{#                {% endwith %}#}
+                <br><br>
+            {% endfor %}
+            {#                    {% with index=0 model_name='army' parent=nation.id %}#}
+            {#                        {% include "nation/components/specialisations/none_field.html" %}#}
+            {#                    {% endwith %}#}
+            </div>
+
+        {% endautoescape %}
+
+
+{% endblock %}

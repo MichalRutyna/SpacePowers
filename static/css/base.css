@@ -24,6 +24,11 @@ footer {
     filter: brightness(125%);
 }
 
+.hover_darken_content:hover svg {
+    transition: 0.3s;
+    filter: brightness(80%);
+}
+
 .post-title:hover {
     filter: brightness(80%);
 }

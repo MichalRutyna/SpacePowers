@@ -2,7 +2,7 @@
 
 {% load editable_field %}
 
-{% block title %}{{ nations.first.name }}{% endblock %}
+{% block title %}Your nations{% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -17,38 +17,38 @@
 
             {% autoescape off %}
                 <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
-                <h2 class="text-center text-body bg-primary">{{ nation.name }}</h2>
+                <a href="{% url 'b:nation:details' nation.slug %}"><h2 class="text-center text-body bg-primary">{{ nation.name }}</h2></a>
                 {% if not nation.active %}
                     <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
                         administrator</h2>
                 {% endif %}
 
-                {% with 'PKB' as field_slug %}
-                    {% include "nation/components/pkb_field.html" %}
+                {% with field_slugs='"PKB", "ABC"' %}
+                    {% include "nation/components/specialisations/pkb_field.html" %}
                 {% endwith %}
-
-                {% with 'population' as field_slug %}
-                    {% include "nation/components/population_field.html" %}
-                {% endwith %}
-
-                <h2 class="text-danger text-center">Combat forces:</h2>
-                    {% for army in nation.armies.all %}
-                        {% with index=army.pk model_name='army' parent=nation.id %}
-                            {% include "nation/components/armies_field.html" %}
-                        {% endwith %}
-                            {% for unit in army.units.all %}
-                                {% with index=unit.pk model_name='unit' parent=army.id %}
-                                    {% include "nation/components/unit_field.html" %}
-                                {% endwith %}
-                            {% endfor %}
-                            {% with index=0 model_name='unit' parent=army.id %}
-                                {% include "nation/components/none_field.html" %}
-                            {% endwith %}
-                        <br><br>
-                    {% endfor %}
-                    {% with index=0 model_name='army' parent=nation.id %}
-                        {% include "nation/components/none_field.html" %}
-                    {% endwith %}
+{##}
+{#                {% with 'population' as field_slug %}#}
+{#                    {% include "nation/components/specialisations/population_field.html" %}#}
+{#                {% endwith %}#}
+{##}
+{#                <h2 class="text-danger text-center">Combat forces:</h2>#}
+{#                    {% for army in nation.armies.all %}#}
+{#                        {% with index=army.pk model_name='army' parent=nation.id %}#}
+{#                            {% include "nation/components/specialisations/armies_field.html" %}#}
+{#                        {% endwith %}#}
+{#                            {% for unit in army.units.all %}#}
+{#                                {% with index=unit.pk model_name='unit' parent=army.id %}#}
+{#                                    {% include "nation/components/specialisations/unit_field.html" %}#}
+{#                                {% endwith %}#}
+{#                            {% endfor %}#}
+{#                            {% with index=0 model_name='unit' parent=army.id %}#}
+{#                                {% include "nation/components/specialisations/none_field.html" %}#}
+{#                            {% endwith %}#}
+{#                        <br><br>#}
+{#                    {% endfor %}#}
+{#                    {% with index=0 model_name='army' parent=nation.id %}#}
+{#                        {% include "nation/components/specialisations/none_field.html" %}#}
+{#                    {% endwith %}#}
                 </div>
 
             {% endautoescape %}

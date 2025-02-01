@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag("nation/components/editable_field.html")
+@register.inclusion_tag("nation/components/specialisations/../../templates/nation/components/nation_field.html")
 def editable_field(context):
     return ""
 

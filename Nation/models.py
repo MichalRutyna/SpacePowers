@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls.base import reverse
 
@@ -10,8 +11,8 @@ class Nation(models.Model):
     slug = models.SlugField(max_length=255, verbose_name='nation_url', unique=True)
     active = models.BooleanField(default=False)
 
-    population = models.IntegerField(default=0, verbose_name='Population')
-    PKB = models.IntegerField(default=0, verbose_name='PKB')
+    population = models.PositiveIntegerField(default=0, verbose_name='Population', validators=[MinValueValidator(1, message='Population must be greater than 0')])
+    PKB = models.PositiveIntegerField(default=0, verbose_name='PKB', validators=[MinValueValidator(1, message='PKB must be greater than 0')])
 
     def get_name_foreign(self):
         # proof of concept for accessing data from other nations
@@ -29,6 +30,9 @@ class Nation(models.Model):
                 response[field.name] = field.value_to_string(self)
         return response
 
+    def get_details_url(self):
+        return reverse("b:nation:details", kwargs={"slug": self.slug})
+
     def get_news_url(self):
         return reverse('b:news:nation', kwargs={"slug": self.slug})
 
@@ -41,7 +45,7 @@ class Nation(models.Model):
 
 
 class Army(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='Name')
     slug = models.SlugField(max_length=100, unique=True)
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, related_name='armies', verbose_name='allegiance')
 
@@ -60,11 +64,11 @@ class Army(models.Model):
 
 
 class Unit(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='Name')
     army = models.ForeignKey(Army, on_delete=models.PROTECT, related_name='units')
 
-    size = models.IntegerField(default=0)
-    upkeep_per_unit = models.IntegerField(default=0)
+    size = models.IntegerField(default=0, verbose_name='Size')
+    upkeep_per_unit = models.IntegerField(default=0, verbose_name='Upkeep per unit')
 
 
 
