@@ -8,7 +8,8 @@
             {% block field_text %}
             {% endblock %}
         </span>
-        <button class="btn btn-outline-primary m-1 hover_darken_content"
+        <button class="btn btn-outline-primary m-1 hover_darken_content" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                data-bs-original-title='Edit {{ field_slugs | cut:'[' | cut:']' | cut:'"'}}'
                 hx-get="{% url "b:nation:edit" nation.slug %}"
                 hx-target="closest #editable">
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->

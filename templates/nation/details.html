@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load editable_field %}
-
 {% block title %}{{ nation.name }}{% endblock %}
 
 {% block content %}
@@ -39,14 +37,14 @@
                         {% include "nation/components/specialisations/unit_field.html" %}
                     {% endwith %}
                 {% endfor %}
-{#                {% with field_slugs='["population"]' model_slug='nation' instance_pk=nation.pk %}#}
-{#                    {% include "nation/components/specialisations/none_field.html" %}#}
-{#                {% endwith %}#}
+                {% with field_slugs='["name", "size", "upkeep_per_unit"]' model_slug='unit' parent_model_slug="army" parent_pk=army.pk %}
+                    {% include "nation/components/create_field.html" %}
+                {% endwith %}
                 <br><br>
             {% endfor %}
-            {#                    {% with index=0 model_name='army' parent=nation.id %}#}
-            {#                        {% include "nation/components/specialisations/none_field.html" %}#}
-            {#                    {% endwith %}#}
+            {% with field_slugs='["name"]' model_slug='army' parent_model_slug="nation" parent_pk=nation.pk %}
+                {% include "nation/components/create_field.html" %}
+            {% endwith %}
             </div>
 
         {% endautoescape %}

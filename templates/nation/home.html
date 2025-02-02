@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load editable_field %}
-
 {% block title %}Your nations{% endblock %}
 
 {% block content %}
@@ -23,32 +21,12 @@
                         administrator</h2>
                 {% endif %}
 
-                {% with field_slugs='"PKB", "ABC"' %}
-                    {% include "nation/components/specialisations/pkb_field.html" %}
-                {% endwith %}
-{##}
-{#                {% with 'population' as field_slug %}#}
-{#                    {% include "nation/components/specialisations/population_field.html" %}#}
-{#                {% endwith %}#}
-{##}
-{#                <h2 class="text-danger text-center">Combat forces:</h2>#}
-{#                    {% for army in nation.armies.all %}#}
-{#                        {% with index=army.pk model_name='army' parent=nation.id %}#}
-{#                            {% include "nation/components/specialisations/armies_field.html" %}#}
-{#                        {% endwith %}#}
-{#                            {% for unit in army.units.all %}#}
-{#                                {% with index=unit.pk model_name='unit' parent=army.id %}#}
-{#                                    {% include "nation/components/specialisations/unit_field.html" %}#}
-{#                                {% endwith %}#}
-{#                            {% endfor %}#}
-{#                            {% with index=0 model_name='unit' parent=army.id %}#}
-{#                                {% include "nation/components/specialisations/none_field.html" %}#}
-{#                            {% endwith %}#}
-{#                        <br><br>#}
-{#                    {% endfor %}#}
-{#                    {% with index=0 model_name='army' parent=nation.id %}#}
-{#                        {% include "nation/components/specialisations/none_field.html" %}#}
-{#                    {% endwith %}#}
+
+                 PKB: {{ nation.PKB }}
+                <br>
+
+                Population: {{ nation.population }}
+
                 </div>
 
             {% endautoescape %}

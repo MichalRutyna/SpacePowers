@@ -9,7 +9,5 @@ class UnitInLine(admin.TabularInline):
 class ArmyInLine(admin.TabularInline):
     model = Army
     extra = 0
-    fields = ['name', 'slug',]
+    fields = ['name']
     inlines = [UnitInLine]
-
-    prepopulated_fields = {'slug': ('name',)}

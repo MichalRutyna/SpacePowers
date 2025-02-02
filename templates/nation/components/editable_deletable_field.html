@@ -8,7 +8,8 @@
             {% block field_text %}
             {% endblock %}
         </span>
-        <button class="btn btn-outline-primary m-1 hover_darken_content"
+        <button class="btn btn-outline-primary m-1 hover_darken_content" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                data-bs-original-title='Edit {{ model_slug }}'
                 hx-get="{% url "b:nation:edit" nation.slug %}"
                 hx-target="closest #editable">
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
@@ -22,9 +23,10 @@
             </svg>
         </button>
 
-        <button class="btn btn-outline-danger m-1 hover_darken_content"
+        <button class="btn btn-outline-danger m-1 hover_darken_content"data-bs-toggle="tooltip" data-bs-placement="bottom"
+                data-bs-original-title='Delete {{ model_slug }}'
                 hx-delete="{% url "b:nation:edit" nation.slug %}"
-                hx-target="closest #field">
+                hx-target="closest #editable">
             <svg width="17px" height="17px" viewBox="0 2 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 12V17" stroke="#d9534f" stroke-width="2" stroke-linecap="round"
                       stroke-linejoin="round"></path>

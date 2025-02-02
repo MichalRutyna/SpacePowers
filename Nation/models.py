@@ -45,8 +45,7 @@ class Nation(models.Model):
 
 
 class Army(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Name')
-    slug = models.SlugField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, verbose_name='Name', default="New army")
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, related_name='armies', verbose_name='allegiance')
 
     #location = models.ForeignKey()
@@ -64,7 +63,7 @@ class Army(models.Model):
 
 
 class Unit(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Name')
+    name = models.CharField(max_length=100, verbose_name='Name', default="New unit")
     army = models.ForeignKey(Army, on_delete=models.PROTECT, related_name='units')
 
     size = models.IntegerField(default=0, verbose_name='Size')

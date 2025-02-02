@@ -6,12 +6,10 @@ from .admin_inlines import *
 
 class NationAdmin(admin.ModelAdmin):
     list_display = ['name', 'owner']
-    prepopulated_fields = {'slug':('name',)}
     inlines = [ArmyInLine]
 
 class ArmyAdmin(admin.ModelAdmin):
     list_display = ['name', 'nation']
-    prepopulated_fields = {'slug':('name',)}
     inlines = [UnitInLine]
 
 
