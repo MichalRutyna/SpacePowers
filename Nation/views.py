@@ -31,17 +31,22 @@ logger = logging.getLogger(__name__)
 
 class NationHomeView(View):
     success_template = 'nation/home.html'
+    single_nation_template = 'nation/details.html'
     missing_nation_template = 'nation/no_nation.html'
 
     def get(self, request):
         context = {}
         nations = Nation.objects.filter(owner_id=request.user.id)
         if nations:
-            context['nations'] = nations
-            return render(request, self.success_template, context)
+            if nations.count() == 1:
+                context['nation'] = nations.first()
+                return render(request, self.single_nation_template, context)
+            else:
+                context['nations'] = nations
+                return render(request, self.success_template, context)
         else:
             context['nation_creation_enabled'] = settings.NATION_CREATION_ALLOWED
-            return render(request, 'nation/no_nation.html', context=context)
+            return render(request, self.missing_nation_template, context=context)
 
 
 class NationDetailView(DetailView):

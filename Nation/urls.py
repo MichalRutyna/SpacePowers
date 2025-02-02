@@ -7,8 +7,7 @@ app_name = "nation"
 
 urlpatterns = [
     path('', login_required(NationHomeView.as_view()), name="home"),
-
     path('<slug:slug>/', NationDetailView.as_view(), name="details"),
-
+    path('create/', NationCreateView.as_view(), name="create"),
     path('<slug:nation_slug>/fields/', login_required(ModelFieldEndpoint.as_view()), name="edit"),
 ]

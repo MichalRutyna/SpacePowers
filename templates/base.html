@@ -25,7 +25,12 @@
             <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'b:nation:home' %}">Nation
+                        <a class="nav-link active" href="{% url 'b:nation:home' %}">
+                            {% if user.claimed_nations.count <= 1 %}
+                                Nation
+                            {% else %}
+                                Nations
+                            {% endif %}
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>
