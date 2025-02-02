@@ -36,6 +36,8 @@ class Nation(models.Model):
     def get_news_url(self):
         return reverse('b:news:nation', kwargs={"slug": self.slug})
 
+    def log_info(self):
+        return f"Nation {self.name}, owned by {self.owner}, population: {self.population}, PKB: {self.PKB}"
     def __str__(self):
         return self.name
 
@@ -53,6 +55,8 @@ class Army(models.Model):
     def get_upkeep(self) -> float:
         return 123.2
 
+    def log_info(self):
+        return f"Army {self.name} belonging to nation {self.nation}"
     def __str__(self):
         return self.name
 
@@ -70,7 +74,8 @@ class Unit(models.Model):
     upkeep_per_unit = models.IntegerField(default=0, verbose_name='Upkeep per unit')
 
 
-
+    def log_info(self):
+        return f"Unit {self.name} belonging to army {self.army} ({self.army.nation}), size {self.size}, upkeep {self.upkeep_per_unit}"
     def __str__(self):
         return self.name
     class Meta:

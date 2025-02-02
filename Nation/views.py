@@ -1,15 +1,11 @@
-from urllib import request
-from wsgiref.validate import validator
-
 from django.core.exceptions import ValidationError
-from django.forms.models import ModelForm
 from django.http import HttpResponse
 
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http.request import QueryDict
 from django.shortcuts import render, redirect
-from django.urls.base import reverse_lazy
+from django.urls.base import reverse_lazy, reverse
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -17,7 +13,6 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 
 from django.template.defaultfilters import slugify
-from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.apps import apps
 
@@ -31,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 class NationHomeView(View):
     success_template = 'nation/home.html'
-    single_nation_template = 'nation/details.html'
     missing_nation_template = 'nation/no_nation.html'
 
     def get(self, request):
@@ -39,8 +33,7 @@ class NationHomeView(View):
         nations = Nation.objects.filter(owner_id=request.user.id)
         if nations:
             if nations.count() == 1:
-                context['nation'] = nations.first()
-                return render(request, self.single_nation_template, context)
+                return redirect('b:nation:details', slug= nations[0].slug)
             else:
                 context['nations'] = nations
                 return render(request, self.success_template, context)
@@ -49,9 +42,28 @@ class NationHomeView(View):
             return render(request, self.missing_nation_template, context=context)
 
 
-class NationDetailView(DetailView):
+class NationDetailView(UserPassesTestMixin, DetailView):
     model = Nation
     template_name = 'nation/details.html'
+
+    errors = []
+
+    def test_func(self):
+        allowed = False
+        if self.request.user.is_staff:
+            allowed = True
+        if self.get_object().owner_id == self.request.user.id:
+            allowed = True
+        return allowed
+
+    def handle_no_permission(self):
+        return redirect(reverse_lazy('b:other_nations:nation_details', kwargs={'slug': self.get_object().slug}))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['edition_allowed'] = settings.NATION_EDITION_ALLOWED or self.request.user.is_staff
+        return context
+
 
 
 class NationCreateView(UserPassesTestMixin, CreateView):
@@ -84,7 +96,26 @@ class NationCreateView(UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 
-class ModelFieldEndpoint(View):
+class ModelFieldEndpoint(UserPassesTestMixin, View):
+    errors = []
+
+    def test_func(self):
+        allowed = False
+        if self.request.user.is_staff:
+            allowed = True
+        if settings.NATION_EDITION_ALLOWED:
+            allowed = True
+        else:
+            logging.log(f"{self.request.user} tried to edit a nation when not allowed, probably request forgery")
+            self.errors.append("An administrator has disabled nation creation.")
+        # Maybe spam protection here
+
+        return allowed
+
+    def handle_no_permission(self):
+        context = {"error": "forbidden",
+                   "message": "You cannot edit nation now!<br>" + self.errors[0]}
+
     def get(self, *args, **kwargs):
         fields = self.request.GET.getlist('field_slugs')
         model = apps.get_model(app_label='Nation', model_name=self.request.GET['model_slug'])
@@ -159,7 +190,7 @@ class ModelFieldEndpoint(View):
                 messages.error(self.request, error)
 
         logger.info(
-            f"{self.request.user} changed {fields} of model {model} ({self.kwargs["nation_slug"]}) from {previous_values} to {changed_values}")
+            f"{self.request.user} changed {fields} of {model} ({self.kwargs["nation_slug"]}) from {previous_values} to {changed_values}")
         return HttpResponse("", headers={"HX-Refresh": "true"})
 
     def post(self, *args, **kwargs):
@@ -180,7 +211,7 @@ class ModelFieldEndpoint(View):
                 f"Object creation of {data.get('model_slug')} failed! Check configuration! Error: {e}")
 
         logger.info(
-            f"{self.request.user} created model {model} ({self.kwargs["nation_slug"]})")
+            f"{self.request.user} created an instance of {model} ({self.kwargs["nation_slug"]})")
 
         fields = data.getlist('field_slugs')
         fields_string = ['"' + f + '"' for f in fields]
@@ -247,4 +278,6 @@ class ModelFieldEndpoint(View):
         except Exception as e:
             logger.error(e)
             messages.error(self.request, e)
+        logger.info(
+                f"{self.request.user} deleted {instance.log_info()} -- model {model}, nation ({self.kwargs["nation_slug"]})")
         return HttpResponse("", headers={"HX-Refresh": "true"})

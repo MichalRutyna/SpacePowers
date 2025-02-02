@@ -9,9 +9,10 @@ class Region(models.Model):
 
     region_type = models.CharField(max_length=100, default='planet', verbose_name="Type of region")
     slug = models.SlugField(max_length=100, unique=True)
-    image = models.ImageField(null=True, blank=True, verbose_name="Image", upload_to ='static/photos/uploads/')
 
 
 
+    def log_info(self):
+        return f"Region {self.name} belonging to nation {self.owner}, region type {self.region_type}"
     def __str__(self):
         return self.name

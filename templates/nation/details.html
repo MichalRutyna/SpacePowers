@@ -27,7 +27,7 @@
                 {% include "nation/components/specialisations/population_field.html" %}
             {% endwith %}
 
-            <h2 class="text-danger text-center">Combat forces:</h2>
+            <h2 class="text-danger text-center mt-4">Combat forces:</h2>
             {% for army in nation.armies.all %}
                 {% with field_slugs='["name"]' model_slug='army' instance_pk=army.pk %}
                     {% include "nation/components/specialisations/armies_field.html" %}

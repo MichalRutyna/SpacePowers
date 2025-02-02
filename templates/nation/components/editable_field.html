@@ -1,15 +1,18 @@
-<form class='border-bottom'
-      hx-put='{% url "b:nation:edit" nation.slug %}'
-      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-      hx-vals='{"field_slugs": {{ field_slugs }}, "model_slug": "{{ model_slug }}", "instance_pk": "{{ instance_pk }}"}'>
+{% if edition_allowed %}
+    <form hx-put='{% url "b:nation:edit" nation.slug %}'
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-vals='{"field_slugs": {{ field_slugs }}, "model_slug": "{{ model_slug }}", "instance_pk": "{{ instance_pk }}"}'>
     {% csrf_token %}
-    <div id="editable" class="d-flex">
+{% endif %}
+<div class='border-bottom d-flex' id="editable">
         <span class="me-auto my-auto align-middle">
             {% block field_text %}
             {% endblock %}
         </span>
-        <button class="btn btn-outline-primary m-1 hover_darken_content" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-original-title='Edit {{ field_slugs | cut:'[' | cut:']' | cut:'"'}}'
+    {% if edition_allowed %}
+        <button class="btn btn-outline-primary m-1 hover_darken_content" data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                data-bs-original-title='Edit {{ field_slugs | cut:'[' | cut:']' | cut:'"' }}'
                 hx-get="{% url "b:nation:edit" nation.slug %}"
                 hx-target="closest #editable">
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
@@ -22,8 +25,10 @@
                       stroke-linejoin="round"></path>
             </svg>
         </button>
-    </div>
+    {% endif %}
+</div>
 
 
-
-</form>
+{% if edition_allowed %}
+    </form>
+{% endif %}
