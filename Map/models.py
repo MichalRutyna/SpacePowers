@@ -9,8 +9,6 @@ class Region(models.Model):
 
     region_type = models.CharField(max_length=100, default='planet', verbose_name="Type of region")
     slug = models.SlugField(max_length=100, unique=True)
-    posx = models.PositiveIntegerField(null=True, blank=True, verbose_name="X position")
-    posy = models.PositiveIntegerField(null=True, blank=True, verbose_name="Y position")
     image = models.ImageField(null=True, blank=True, verbose_name="Image", upload_to ='static/photos/uploads/')
 
 
