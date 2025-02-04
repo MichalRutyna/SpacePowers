@@ -10,9 +10,9 @@
             {% endblock %}
         </span>
     {% if edition_allowed %}
-        <button class="btn btn-outline-primary m-1 hover_darken_content" data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                data-bs-original-title='Edit {{ field_slugs | cut:'[' | cut:']' | cut:'"' }}'
+        <button class="btn btn-outline-primary m-1 hover_darken_content disappearing-button"
+{#                data-bs-toggle="tooltip" data-bs-placement="bottom"#}
+{#                data-bs-original-title='Edit {{ field_slugs | cut:'[' | cut:']' | cut:'"' }}'#}
                 hx-get="{% url "b:nation:edit" nation.slug %}"
                 hx-target="closest #editable">
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->

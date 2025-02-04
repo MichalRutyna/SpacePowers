@@ -1,8 +1,9 @@
 {% if edition_allowed %}
     <form id="editable" class="d-flex">
         <span class="text-info" id="edit"></span>
-        <button class="btn btn-outline-info ms-auto m-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                data-bs-original-title="Create a new {{ model_slug }}"
+        <button class="btn btn-outline-info ms-auto m-1"
+{#                data-bs-toggle="tooltip" data-bs-placement="bottom"#}
+{#                data-bs-original-title="Create a new {{ model_slug }}"#}
                 hx-post="{% url "b:nation:edit" nation.slug %}"
                 hx-target="closest #editable"
                 hx-swap="outerHTML"

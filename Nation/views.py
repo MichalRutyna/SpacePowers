@@ -11,6 +11,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 
 from django.template.defaultfilters import slugify
 from django.contrib import messages
@@ -38,7 +39,7 @@ class NationHomeView(View):
                 context['nations'] = nations
                 return render(request, self.success_template, context)
         else:
-            context['nation_creation_enabled'] = settings.NATION_CREATION_ALLOWED
+            context['nation_creation_enabled'] = (settings.NATION_CREATION_ALLOWED and self.request.user.has_perm('Nation.create_nation')) or self.request.user.is_staff
             return render(request, self.missing_nation_template, context=context)
 
 
@@ -49,11 +50,12 @@ class NationDetailView(UserPassesTestMixin, DetailView):
     errors = []
 
     def test_func(self):
-        allowed = False
         if self.request.user.is_staff:
-            allowed = True
-        if self.get_object().owner_id == self.request.user.id:
-            allowed = True
+            return True
+
+        allowed = True
+        if self.get_object().owner_id != self.request.user.id:
+            allowed = False
         return allowed
 
     def handle_no_permission(self):
@@ -61,7 +63,7 @@ class NationDetailView(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['edition_allowed'] = settings.NATION_EDITION_ALLOWED or self.request.user.is_staff
+        context['edition_allowed'] = (settings.NATION_EDITION_ALLOWED and self.request.user.has_perm('Nation.change_nation')) or self.request.user.is_staff
         return context
 
 
@@ -74,6 +76,8 @@ class NationCreateView(UserPassesTestMixin, CreateView):
     errors = []
 
     def test_func(self):
+        if self.request.user.is_staff:
+            return True
         allowed = True
         nation_count = Nation.objects.filter(owner_id=self.request.user.id).count()
         if nation_count > settings.NATION_CREATION_ALLOWED:
@@ -100,14 +104,22 @@ class ModelFieldEndpoint(UserPassesTestMixin, View):
     errors = []
 
     def test_func(self):
-        allowed = False
         if self.request.user.is_staff:
-            allowed = True
-        if settings.NATION_EDITION_ALLOWED:
-            allowed = True
+            return True
+
+        allowed = True
+        if not settings.NATION_EDITION_ALLOWED:
+            allowed = False
         else:
-            logging.log(f"{self.request.user} tried to edit a nation when not allowed, probably request forgery")
+            logging.warning(f"{self.request.user} tried to edit a nation when edition was disabled, probably request forgery")
             self.errors.append("An administrator has disabled nation creation.")
+
+        if not self.request.user.has_perm('Nation.change_nation'):
+            allowed = False
+        else:
+            logging.warning(f"{self.request.user} tried to edit a nation without permissions, probably request forgery")
+            self.errors.append("You don't have permission to edit a nation.")
+
         # Maybe spam protection here
 
         return allowed

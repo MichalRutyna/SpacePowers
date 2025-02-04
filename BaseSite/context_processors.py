@@ -14,7 +14,7 @@ def get_nation_dropdown(request):
                     <div class="dropdown-menu">'
 
         for nation in nations:
-            url = reverse_lazy('b:other_nations:nation_details', args=(nation.id,))
+            url = reverse_lazy('b:other_nations:nation_details', args=(nation.slug,))
             name = nation.name
 
             response += f"<a class='dropdown-item' href='{url}'>{name}</a>"
