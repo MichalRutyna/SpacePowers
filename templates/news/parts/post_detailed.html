@@ -1,4 +1,6 @@
-{% extends "news/components/post_overwiewed.html" %}
+{# Used in single post #}
+
+{% extends "news/parts/post_overwiewed.html" %}
 
 {# Title no longer links to the post #}
 {% block title_link %}
@@ -27,5 +29,5 @@
 
 {# include comment section #}
 {% block comments %}
-    {% include 'news/components/post_comment_section.html' %}
+    {% include 'news/parts/components/comment_section.html' %}
 {% endblock %}

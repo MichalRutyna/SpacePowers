@@ -9,7 +9,7 @@
     <h1 class="text-center">Our information about {{ search }}:</h1>
     {% if posts %}
         {% for post in posts %}
-            {% include "news/components/post_overwiewed.html" %}
+            {% include "news/parts/post_overwiewed.html" %}
             <br><br>
         {% endfor %}
         {% else %}

@@ -15,7 +15,7 @@
 
             {% autoescape off %}
                 <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
-                <a href="{% url 'b:nation:details' nation.slug %}"><h2 class="text-center text-body bg-primary">{{ nation.name }}</h2></a>
+                <a href="{% url 'b:nation:details' nation.slug %}" class="link-underline-info link-underline-opacity-50-hover"><h2 class="text-center text-body bg-primary">{{ nation.name }}</h2></a>
                 {% if not nation.active %}
                     <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
                         administrator</h2>

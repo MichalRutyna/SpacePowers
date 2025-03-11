@@ -1,0 +1,48 @@
+{# Main news page #}
+
+{% load likes_post %}
+
+<div class="card mb-3 post p-0">
+
+    {% block title_link %}
+        <a href="{{ post.get_absolute_url }}">
+            <h3 class="card-header text-body post-title">
+                {{ post.title|truncatewords_html:7 }}
+            </h3>
+
+        </a>
+    {% endblock %}
+    <div class="card-body">
+        <h5 class="card-title">
+            {% block nation_name %}
+                <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7 }}</a>
+            {% endblock %}
+        </h5>
+        <h6 class="card-subtitle">
+            {% include "news/parts/components/tags.html" %}
+        </h6>
+    </div>
+    <div class="card-body">
+        {% block content %}
+            <p class="card-text">
+                {{ post.content | truncatewords_html:100 }}
+            </p>
+        {% endblock %}
+    </div>
+    <div class="card-body likes_comments">
+        {% likes_post user.id post as likes_post %}
+        {% with target='b:news:like_post' index=post.pk likes=post.likes %}
+            {% include "news/parts/components/likes.html" %}
+        {% endwith %}
+        |
+        {% include "news/parts/components/comments_count.html" %}
+    </div>
+    {% block comments %}
+    {% endblock %}
+    <div class="card-footer text-muted">
+                <span class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      data-bs-original-title="{{ post.created_at|date:"d.m.Y G:i" }}">
+                {{ post.created_at|timesince }} ago</span>
+    </div>
+
+</div>
