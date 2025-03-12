@@ -27,6 +27,14 @@
     </p>
 {% endblock %}
 
+{# show roll #}
+{% block roll %}
+    |
+    {% with roll=post.roll %}
+        {% include "news/parts/components/roll.html" %}
+    {% endwith %}
+{% endblock %}
+
 {# include comment section #}
 {% block comments %}
     {% include 'news/parts/components/comment_section.html' %}

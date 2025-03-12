@@ -4,21 +4,22 @@ from crispy_forms.layout import Submit, Reset
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 from Nation.models import Nation
-from .models import Tag, Post
+from .models import Tag, Post, Comment
 
 
-class CommentForm(forms.Form):
-    comment = forms.CharField(
-        label='Comment',
-        required=True,
-    )
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('comment', 'nation', 'metagame')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'id-create-comment-form'
         self.helper.form_method = 'post'
         self.helper.form_action = 'add_comment/'
+
+        self.fields['nation'].queryset = Nation.objects.filter(owner=user)
 
         self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
         self.helper.add_input(Submit('submit', "Comment", css_class='btn-primary'))

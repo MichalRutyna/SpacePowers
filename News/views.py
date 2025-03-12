@@ -26,7 +26,7 @@ import random
 
 class Home(ListView):
     model = Post
-    template_name = 'news/home.html'
+    template_name = 'news/pages/home.html'
     context_object_name = 'posts'
     paginate_by = 2
 
@@ -38,7 +38,7 @@ class Home(ListView):
 
 class GetPost(DetailView):
     model = Post
-    template_name = 'news/single.html'
+    template_name = 'news/pages/single.html'
     context_object_name = 'post'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -50,18 +50,18 @@ class GetPost(DetailView):
         self.object.save()
         self.object.refresh_from_db()
 
-        comments = Comment.objects.filter(post=self.object, is_published=True).order_by('-created_at')
+        comments = Comment.objects.filter(post=self.object, is_published=True).order_by('-liked_by')
         paginator = Paginator(comments, 5)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['comments'] = page_obj
 
-        context['form'] = CommentForm()
+        context['comment_form'] = CommentForm(user=self.request.user)
         return context
 
 
 class PostsByCategory(ListView):
-    template_name = 'news/category.html'
+    template_name = 'news/pages/sort_by/category.html'
     context_object_name = 'posts'
     paginate_by = 10
     allow_empty = False
@@ -79,7 +79,7 @@ class PostsByCategory(ListView):
 
 
 class PostsByNation(ListView):
-    template_name = 'news/nation.html'
+    template_name = 'news/pages/sort_by/nation.html'
     context_object_name = 'posts'
     paginate_by = 4
     allow_empty = False
@@ -97,7 +97,7 @@ class PostsByNation(ListView):
 
 
 class PostsByTag(ListView):
-    template_name = 'news/tag.html'
+    template_name = 'news/pages/sort_by/tag.html'
     context_object_name = 'posts'
     paginate_by = 4
     allow_empty = False
@@ -133,7 +133,7 @@ class PostsByAuthor(View):
 
 
 class Search(ListView):
-    template_name = 'news/search.html'
+    template_name = 'news/pages/sort_by/search.html'
     context_object_name = 'posts'
     paginate_by = 4
 
@@ -177,6 +177,7 @@ def like_comment(request, pk):
 @require_POST
 @login_required
 def add_comment(request, post_slug):
+
     post = get_object_or_404(Post, slug=post_slug)
     username = request.user.username
     nation = request.user.claimed_nations.first()
@@ -191,18 +192,11 @@ def add_comment(request, post_slug):
                 'comment': 'Invalid input' if not comment_valid else '',
             },
         }
-        # return JsonResponse(response_data)
         return redirect("b:news:post", slug=post_slug)
 
     comment = Comment(author=request.user, comment=comment_text, nation=nation, post=post)
     comment.save()
 
-    response_data = {
-        'success': True,
-        'author': comment.author.id,
-        'created_at': comment.created_at.strftime('%d %B %Y'),
-        'comment': comment.comment,
-    }
     return redirect("b:news:post", slug=post_slug)
 
 
@@ -215,7 +209,7 @@ class AddPostView(UserPassesTestMixin, CreateView):
         return kwargs
 
     form_class = PostForm
-    template_name = 'news/create_post.html'
+    template_name = 'news/pages/create_post.html'
     success_url = reverse_lazy("b:news:home")
 
     errors = []

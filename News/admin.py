@@ -3,6 +3,9 @@ from django.contrib import admin
 from .models import *
 
 
+class CommentInlineAdmin(admin.TabularInline):
+    model = Comment
+
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     save_as = False
@@ -11,8 +14,9 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'category', 'tags', 'nation', 'author', 'created_at', 'is_published')
-    readonly_fields = ('views', 'created_at', 'seen_by', 'roll', 'comments')
-    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'comments', 'roll', 'seen_by', 'views', 'created_at')
+    readonly_fields = ('views', 'created_at', 'seen_by')
+    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'roll', 'seen_by', 'views', 'created_at')
+    inlines = (CommentInlineAdmin,)
 
     list_editable = ('is_published',)
 
@@ -45,6 +49,7 @@ class CommentAdmin(admin.ModelAdmin):
         queryset.update(is_published=False)
 
     unpublish_comments.short_description = "Unpublish selected comments"
+
 
 
 admin.site.register(Category, CategoryAdmin)

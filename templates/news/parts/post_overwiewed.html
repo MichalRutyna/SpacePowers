@@ -32,10 +32,12 @@
     <div class="card-body likes_comments">
         {% likes_post user.id post as likes_post %}
         {% with target='b:news:like_post' index=post.pk likes=post.likes %}
-            {% include "news/parts/components/likes.html" %}
+            {% include "news/parts/components/like_count.html" %}
         {% endwith %}
         |
         {% include "news/parts/components/comments_count.html" %}
+        {% block roll %}
+        {% endblock %}
     </div>
     {% block comments %}
     {% endblock %}
