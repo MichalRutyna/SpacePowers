@@ -28,11 +28,16 @@
 {% endblock %}
 
 {# show roll #}
-{% block roll %}
-    |
+{% block rolls %}
+    <span class="rolls float-end">
     {% with roll=post.roll %}
         {% include "news/parts/components/roll.html" %}
     {% endwith %}
+    |
+    {% with secrecy_roll=post.secrecy_roll %}
+        {% include "news/parts/components/secrecy_roll.html" %}
+    {% endwith %}
+    </span>
 {% endblock %}
 
 {# include comment section #}

@@ -50,6 +50,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tag')
     roll = models.IntegerField(default=-1, verbose_name='Roll')
+    secrecy_roll = models.IntegerField(default=-1, verbose_name='Secrecy roll')
     is_published = models.BooleanField(default=False)
 
     @property

@@ -1,10 +1,8 @@
 from django.contrib import admin
+from django.utils.html import format_html, mark_safe, format_html_join
 
 from .models import *
 
-
-class CommentInlineAdmin(admin.TabularInline):
-    model = Comment
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
@@ -13,15 +11,18 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'nation', 'author', 'category',  'created_at', 'is_published')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
-    list_filter = ('category', 'category', 'tags', 'nation', 'author', 'created_at', 'is_published')
-    readonly_fields = ('views', 'created_at', 'seen_by')
-    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'roll', 'seen_by', 'views', 'created_at')
-    inlines = (CommentInlineAdmin,)
+    list_filter = ('category', 'tags', 'nation', 'author', 'created_at', 'is_published')
+    readonly_fields = ('views', 'created_at', 'seen_by', 'comments')
+    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'roll', 'secrecy_roll', 'comments', 'seen_by', 'views', 'created_at')
 
     list_editable = ('is_published',)
 
+
     def comments(self, obj):
-        return ", ".join([str(a) for a in obj.comments.all()])
+        return format_html_join("",
+                                "<a href=\"{}\">{}</a><br>",
+                                ((mark_safe(reverse("admin:News_comment_change", args=(a.pk,))), str(a)) for a in obj.comments.all())
+                                )
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
