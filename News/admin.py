@@ -13,7 +13,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('category', 'tags', 'nation', 'author', 'created_at', 'is_published')
     readonly_fields = ('views', 'created_at', 'seen_by', 'comments')
-    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'roll', 'secrecy_roll', 'comments', 'seen_by', 'views', 'created_at')
+    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'success_roll', 'secrecy_roll', 'comments', 'seen_by', 'views', 'created_at')
 
     list_editable = ('is_published',)
 
@@ -30,6 +30,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
+    list_display = ('title', 'success_roll_required', 'secrecy_roll_required')
 
 
 class CommentAdmin(admin.ModelAdmin):

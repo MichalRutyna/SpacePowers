@@ -30,13 +30,19 @@
 {# show roll #}
 {% block rolls %}
     <span class="rolls float-end">
-    {% with roll=post.roll %}
-        {% include "news/parts/components/roll.html" %}
-    {% endwith %}
-    |
-    {% with secrecy_roll=post.secrecy_roll %}
-        {% include "news/parts/components/secrecy_roll.html" %}
-    {% endwith %}
+    {% if post.requires_success_roll %}
+        {% with roll=post.success_roll %}
+            {% include "news/parts/components/roll.html" %}
+        {% endwith %}
+        {% if post.requires_secrecy_roll %}
+            |
+        {% endif %}
+    {% endif %}
+    {% if post.requires_secrecy_roll %}
+        {% with secrecy_roll=post.secrecy_roll %}
+            {% include "news/parts/components/secrecy_roll.html" %}
+        {% endwith %}
+    {% endif %}
     </span>
 {% endblock %}
 
