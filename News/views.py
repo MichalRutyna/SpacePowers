@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
 from django.http.response import HttpResponse
 from django.template.defaultfilters import slugify
 from django.urls.base import reverse_lazy
@@ -50,10 +51,11 @@ class GetPost(DetailView):
         self.object.save()
         self.object.refresh_from_db()
 
-        comments = Comment.objects.filter(post=self.object, is_published=True).order_by('-liked_by')
-        paginator = Paginator(comments, 5)
+        comments = Comment.objects.annotate(cc=Count("liked_by")).filter(post=self.object, is_published=True).order_by('-cc')
+        paginator = Paginator(comments, 100)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        print(paginator)
         context['comments'] = page_obj
 
         context['comment_form'] = CommentForm(user=self.request.user)

@@ -38,9 +38,9 @@ class PostAdmin(admin.ModelAdmin):
             }
         ),
         (
-            "Comments",
+            "Interactions",
             {
-                "fields": ["comments"]
+                "fields": ["comments", "liked_by"]
             }
         ),
         (
