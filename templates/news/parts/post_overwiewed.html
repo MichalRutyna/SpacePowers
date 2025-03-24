@@ -29,6 +29,8 @@
             </p>
         {% endblock %}
     </div>
+    {% block rolls %}
+    {% endblock %}
     <div class="card-body likes_comments">
         {% likes_post user.id post as likes_post %}
         {% with target='b:news:like_post' index=post.pk likes=post.likes %}
@@ -36,9 +38,9 @@
         {% endwith %}
         |
         {% include "news/parts/components/comments_count.html" %}
-        {% block rolls %}
-        {% endblock %}
+
     </div>
+
     {% block comments %}
     {% endblock %}
     <div class="card-footer text-muted">
