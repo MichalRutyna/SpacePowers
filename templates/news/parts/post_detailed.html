@@ -31,32 +31,17 @@
 {% block rolls %}
     <ul class="list-group list-group-flush">
         {% if post.requires_success_roll %}
-            {% with roll=post.success_roll %}
-                <li class="list-group-item">
-                    <span class="badge bg-success">
-                        {% include "news/parts/components/roll.html" %}
-                    </span>
-                    <span class="align-middle">
-                        Complete sucess, timeline moves foreward 1 month
-                    </span>
-                </li>
+            {% with roll=post.success_roll description=post.success_roll_description %}
+                {% include "news/parts/components/success_roll.html" %}
             {% endwith %}
         {% endif %}
+
         {% if post.requires_secrecy_roll %}
-            {% with secrecy_roll=post.secrecy_roll %}
-                <li class="list-group-item">
-                    <span class="badge bg-success">
-                        {% include "news/parts/components/secrecy_roll.html" %}
-                    </span>
-                    <span class="align-middle">
-                        Nobody's gonna know
-                    </span>
-                </li>
+            {% with roll=post.secrecy_roll description=post.secrecy_roll_description %}
+                {% include "news/parts/components/secrecy_roll.html" %}
             {% endwith %}
         {% endif %}
     </ul>
-
-
 {% endblock %}
 
 {# include comment section #}

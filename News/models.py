@@ -53,12 +53,15 @@ class Post(models.Model):
     liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_posts')
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
-    tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tag')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tags')
 
-    success_roll = models.IntegerField(default=-1, verbose_name='Success roll')
-    secrecy_roll = models.IntegerField(default=-1, verbose_name='Secrecy roll')
-    success_roll_override = models.BooleanField(default=False, verbose_name='Success roll override')
-    secrecy_roll_override = models.BooleanField(default=False, verbose_name='Secrecy roll override')
+    success_roll = models.IntegerField(null=True, blank=True, verbose_name='Success roll')
+    success_roll_description = models.TextField(null=True, blank=True, verbose_name='Success roll description')
+    secrecy_roll = models.IntegerField(null=True, blank=True, verbose_name='Secrecy roll')
+    secrecy_roll_description = models.TextField(null=True, blank=True, verbose_name='Secrecy roll description')
+    # overrides for requirements
+    success_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Success roll override')
+    secrecy_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Secrecy roll override')
 
     is_published = models.BooleanField(default=False)
 
@@ -70,10 +73,14 @@ class Post(models.Model):
         return self.liked_by.filter(id=user).exists()
 
     def requires_success_roll(self):
-        return self.tags.filter(success_roll_required=True).exists() or self.success_roll_override
+        if self.success_roll_override is not None:
+            return self.success_roll_override
+        return self.tags.filter(success_roll_required=True).exists()
 
     def requires_secrecy_roll(self):
-        return self.tags.filter(secrecy_roll_required=True).exists() or self.secrecy_roll_override
+        if self.secrecy_roll_override is not None:
+            return self.secrecy_roll_override
+        return self.tags.filter(secrecy_roll_required=True).exists()
 
     def __str__(self):
         return self.title
@@ -82,8 +89,8 @@ class Post(models.Model):
         return reverse('b:news:post', kwargs={"slug": self.slug})
 
     class Meta:
-        verbose_name = 'Article(s)'
-        verbose_name_plural = 'Articles'
+        verbose_name = 'Post(s)'
+        verbose_name_plural = 'Posts'
         ordering = ['-created_at']
 
 

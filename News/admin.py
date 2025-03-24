@@ -13,9 +13,50 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('category', 'tags', 'nation', 'author', 'created_at', 'is_published')
     readonly_fields = ('views', 'created_at', 'seen_by', 'comments')
-    fields = ('title', 'slug', 'author', 'nation',  'category', 'tags', 'content', 'success_roll', 'secrecy_roll', 'comments', 'seen_by', 'views', 'created_at')
-
+    #fields =  [('title', 'slug', 'author', 'nation',  'category', 'tags'), 'content', ('success_roll', 'success_roll_description'), ('secrecy_roll', 'secrecy_roll_description'), 'comments', ()]
+    #filter_horizontal = ["tags"]
     list_editable = ('is_published',)
+    view_on_site = True
+
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["title", ("author", "nation"), "tags", "content"]
+            }
+        ),
+        (
+           "Success roll",
+           {
+               "fields": [("success_roll", "success_roll_description")]
+           }
+        ),
+        (
+            "Secrecy roll",
+            {
+                "fields": [("secrecy_roll", "secrecy_roll_description")]
+            }
+        ),
+        (
+            "Comments",
+            {
+                "fields": ["comments"]
+            }
+        ),
+        (
+            "Misc info",
+            {
+                "fields": ['seen_by', 'views', 'created_at']
+            }
+        ),
+        (
+            "Advanced settings",
+            {
+                "fields": ["slug", "category", ("success_roll_override", "secrecy_roll_override")],
+                "classes": ("collapse",),
+            }
+        )
+    ]
 
 
     def comments(self, obj):
