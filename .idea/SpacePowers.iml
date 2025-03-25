@@ -4,7 +4,7 @@
     <facet type="django" name="Django">
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$" />
-        <option name="settingsModule" value="DatasheetPowers/settings.py" />
+        <option name="settingsModule" value="SpacePowers/settings.py" />
         <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
@@ -15,15 +15,16 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Accounts" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/DatasheetPowers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/BaseSite" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Nation" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/News" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/OtherNations" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Map" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SpacePowers" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv1" />
       <excludeFolder url="file://$MODULE_DIR$/etc" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (DatasheetPowers)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (SpacePowers)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
@@ -34,6 +35,10 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/templates" />
+        <option value="$MODULE_DIR$/Accounts/templates" />
+        <option value="$MODULE_DIR$/Map/templates" />
+        <option value="$MODULE_DIR$/Nation/templates" />
+        <option value="$MODULE_DIR$/News/templates" />
       </list>
     </option>
   </component>

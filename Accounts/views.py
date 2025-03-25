@@ -45,7 +45,7 @@ class ProfileView(TemplateView):
                         })
         return context
 
-# sing up
+
 class SignUpView(UserPassesTestMixin, CreateView):
     form_class = signup_form.CreateUserForm
     template_name = "registration/signup.html"
@@ -56,7 +56,6 @@ class SignUpView(UserPassesTestMixin, CreateView):
         return settings.SIGNUP_ALLOWED
 
 
-# log in
 class CustomLoginView(LoginView):
     form_class = login_form.LoginForm
     success_url = reverse_lazy("b:account:home")
