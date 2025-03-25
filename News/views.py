@@ -55,7 +55,6 @@ class GetPost(DetailView):
         paginator = Paginator(comments, 100)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        print(paginator)
         context['comments'] = page_obj
 
         context['comment_form'] = CommentForm(user=self.request.user)
