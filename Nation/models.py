@@ -5,8 +5,7 @@ from django.urls.base import reverse
 
 
 class Nation(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='claimed_nations')
-    owner_title = models.CharField(max_length=100, unique=False, null=False, default='glorious leader')
+    owners = models.ManyToManyField(User, through="Ownership")
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=255, verbose_name='nation_url', unique=True)
     active = models.BooleanField(default=False)
@@ -30,6 +29,12 @@ class Nation(models.Model):
                 response[field.name] = field.value_to_string(self)
         return response
 
+    def is_user_an_owner(self, user):
+        return self.owners.contains(user)
+
+    def get_title_of_user(self, user):
+        return self.ownership_set.get(user=user).owner_title
+
     def get_details_url(self):
         return reverse("b:nation:details", kwargs={"slug": self.slug})
 
@@ -38,12 +43,25 @@ class Nation(models.Model):
 
     def log_info(self):
         return f"Nation {self.name}, owned by {self.owner}, population: {self.population}, PKB: {self.PKB}"
+
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = "Nations"
         ordering = ['name']
+
+class Ownership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ownerships')
+    nation = models.ForeignKey(Nation, on_delete=models.CASCADE)
+    owner_title = models.CharField(max_length=100, unique=False, null=False, default='glorious leader')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "nation"], name="unique_ownership"
+            )
+        ]
 
 
 class Army(models.Model):

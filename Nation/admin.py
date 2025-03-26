@@ -5,8 +5,8 @@ from .admin_inlines import *
 
 
 class NationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'owner']
-    inlines = [ArmyInLine]
+    list_display = ['name']
+    inlines = [OwnershipInLine, ArmyInLine]
 
 class ArmyAdmin(admin.ModelAdmin):
     list_display = ['name', 'nation']

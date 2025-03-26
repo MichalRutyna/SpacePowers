@@ -14,14 +14,14 @@ class ProfileView(TemplateView):
 
     def get_owner_titles(self):
         if self.request.user.is_authenticated:
-                nations = self.request.user.claimed_nations.filter(active=True)
-                if nations:
-                    ans = f"Welcome {self.request.user.username}, {nations[0].owner_title} of {nations[0].name}"
-                    for n in range(1, len(nations) - 1):
-                        nation = nations[n]
+                ownerships = self.request.user.ownerships.filter(nation__active=True)
+                if ownerships:
+                    ans = f"Welcome {self.request.user.username}, {ownerships[0].owner_title} of {ownerships[0].nation.name}"
+                    for n in range(1, len(ownerships) - 1):
+                        nation = ownerships[n]
                         ans += f", {nation.owner_title} of {nation.name}"
-                    if nations.count() > 1:
-                        ans += f" and {nations[len(nations)-1].owner_title} of {nations[len(nations)-1].name}"
+                    if ownerships.count() > 1:
+                        ans += f" and {ownerships[len(ownerships)-1].owner_title} of {ownerships[len(ownerships)-1].nation.name}"
                     ans += "!"
                     return ans
                 else:
@@ -29,9 +29,9 @@ class ProfileView(TemplateView):
         else:
             return ""
 
-    def get_lifetime_controlled_nation_count(self):
+    def get_controlled_nation_count(self):
         if self.request.user.is_authenticated:
-            return self.request.user.claimed_nations.count()
+            return self.request.user.ownerships.count()
         else:
             return 0
 
@@ -39,7 +39,7 @@ class ProfileView(TemplateView):
         context = super(ProfileView, self).get_context_data(**kwargs)
         context.update({"signup_allowed": settings.SIGNUP_ALLOWED,
                         'intro': self.get_owner_titles(),
-                        'nation_count': self.get_lifetime_controlled_nation_count(),
+                        'nation_count': self.get_controlled_nation_count(),
                         'max_nation_count': settings.MAX_NATIONS_PER_USER,
                         'nation_creation_allowed': settings.NATION_CREATION_ALLOWED,
                         })

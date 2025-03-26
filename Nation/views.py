@@ -18,11 +18,17 @@ from django.contrib import messages
 from django.apps import apps
 
 from .forms import *
-from .models import Nation
+from .models import Nation, Ownership
 
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+def get_user_nations(user):
+    nations = user.ownerships.values_list('nation', flat=True)
+    nations = Nation.objects.filter(id__in=nations)
+    return nations
 
 
 class NationHomeView(View):
@@ -31,7 +37,8 @@ class NationHomeView(View):
 
     def get(self, request):
         context = {}
-        nations = Nation.objects.filter(owner_id=request.user.id)
+        nations = get_user_nations(request.user)
+        print(nations)
         if nations:
             if nations.count() == 1:
                 return redirect('b:nation:details', slug= nations[0].slug)
@@ -79,7 +86,7 @@ class NationCreateView(UserPassesTestMixin, CreateView):
         if self.request.user.is_staff:
             return True
         allowed = True
-        nation_count = Nation.objects.filter(owner_id=self.request.user.id).count()
+        nation_count = self.request.user.ownerships.count()
         if nation_count > settings.NATION_CREATION_ALLOWED:
             self.errors.append("You control the current maximum allowed number of nations.")
             allowed = False
@@ -95,6 +102,7 @@ class NationCreateView(UserPassesTestMixin, CreateView):
         return render(self.request, 'errors/forbidden.html', context)
 
     def form_valid(self, form):
+        Ownership(owner=self.request.user, nation=self.object, owner_title=form.owner_title).save()
         form.instance.owner_id = self.request.user.id
         form.instance.slug = slugify(form.cleaned_data['name'])
         return super().form_valid(form)
@@ -110,17 +118,17 @@ class ModelFieldEndpoint(UserPassesTestMixin, View):
         allowed = True
         if not settings.NATION_EDITION_ALLOWED:
             allowed = False
-        else:
             logging.warning(f"{self.request.user} tried to edit a nation when edition was disabled, probably request forgery")
             self.errors.append("An administrator has disabled nation creation.")
 
         if not self.request.user.has_perm('Nation.change_nation'):
             allowed = False
-        else:
             logging.warning(f"{self.request.user} tried to edit a nation without permissions, probably request forgery")
             self.errors.append("You don't have permission to edit a nation.")
 
         # Maybe spam protection here
+
+        # TODO check if owns this nation
 
         return allowed
 
