@@ -38,7 +38,6 @@ class NationHomeView(View):
     def get(self, request):
         context = {}
         nations = get_user_nations(request.user)
-        print(nations)
         if nations:
             if nations.count() == 1:
                 return redirect('b:nation:details', slug= nations[0].slug)
@@ -46,7 +45,7 @@ class NationHomeView(View):
                 context['nations'] = nations
                 return render(request, self.success_template, context)
         else:
-            context['nation_creation_enabled'] = (settings.NATION_CREATION_ALLOWED and self.request.user.has_perm('Nation.create_nation')) or self.request.user.is_staff
+            context['nation_creation_enabled'] = (settings.NATION_CREATION_ALLOWED and self.request.user.has_perm('Nation.add_nation')) or self.request.user.is_staff
             return render(request, self.missing_nation_template, context=context)
 
 
@@ -61,7 +60,7 @@ class NationDetailView(UserPassesTestMixin, DetailView):
             return True
 
         allowed = True
-        if self.get_object().owner_id != self.request.user.id:
+        if not self.get_object().is_user_an_owner(self.request.user):
             allowed = False
         return allowed
 
@@ -99,13 +98,13 @@ class NationCreateView(UserPassesTestMixin, CreateView):
         context = {"error": "forbidden",
                    "message": "You cannot create a new nation!<br>" + self.errors[0]}
 
-        return render(self.request, 'errors/forbidden.html', context)
+        return render(self.request, '403.html', context)
 
     def form_valid(self, form):
-        Ownership(owner=self.request.user, nation=self.object, owner_title=form.owner_title).save()
-        form.instance.owner_id = self.request.user.id
         form.instance.slug = slugify(form.cleaned_data['name'])
-        return super().form_valid(form)
+        x = super().form_valid(form)
+        Ownership(user=self.request.user, nation=self.object, owner_title=form.cleaned_data['owner_title']).save()
+        return x
 
 
 class ModelFieldEndpoint(UserPassesTestMixin, View):
@@ -193,7 +192,7 @@ class ModelFieldEndpoint(UserPassesTestMixin, View):
 
         previous_values = []
         changed_values = []
-        # could be changed for individual fields if need arises
+        # could be changed for each field if need arises
         for field in fields:
             prev_value = getattr(instance, field)
             previous_values.append(prev_value)

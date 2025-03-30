@@ -229,7 +229,7 @@ class AddPostView(UserPassesTestMixin, CreateView):
         context = {"error": "forbidden",
                    "message": "You cannot create a post!<br>" + self.errors[0]}
 
-        return render(self.request, 'errors/forbidden.html', context)
+        return render(self.request, 'errors/../templates/forbidden.html', context)
 
     def form_valid(self, form):
         form.instance.slug = slugify(form.cleaned_data['title'])

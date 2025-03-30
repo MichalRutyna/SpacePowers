@@ -68,7 +68,7 @@ SECRET_KEY = "saddsdad32nionf09409ms"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 # Application definition
 
@@ -194,9 +194,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-TESTING = True
-
-if TESTING:
+if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
     ]

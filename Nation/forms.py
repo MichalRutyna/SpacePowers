@@ -27,7 +27,7 @@ class CreateNationForm(forms.ModelForm):
 
     class Meta:
         model = Nation
-        fields = ['name', 'owner_title', 'population', 'PKB']
+        fields = ['name', 'population', 'PKB']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

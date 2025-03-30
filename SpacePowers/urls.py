@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include("BaseSite.urls", namespace='b')),
 ]
 
-if settings.TESTING:
+if settings.DEBUG:
     urlpatterns = [
                       *urlpatterns,
                   ] + debug_toolbar_urls()
