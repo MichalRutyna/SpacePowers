@@ -13,7 +13,7 @@ from django.views.generic.base import View
 from django.views.generic.edit import CreateView
 
 from django.conf import settings
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, RollsForm
 from .models import Post, Category, Tag, Comment
 from Nation.models import Nation
 
@@ -237,3 +237,50 @@ class AddPostView(UserPassesTestMixin, CreateView):
         form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
         form.instance.roll = random.randint(1, 20)
         return super().form_valid(form)
+
+class AddRollView(UserPassesTestMixin, View):
+    form_class = RollsForm
+    template_name = 'news/pages/add_roll.html'
+
+    def __init__(self):
+        super().__init__()
+
+    errors = []
+    def test_func(self):
+        return True
+
+    def get(self, *args, **kwargs):
+        success_url = reverse_lazy("b:news:post", kwargs={'slug': self.kwargs['post_slug']})
+        context = {
+            "form": self.form_class(),
+        }
+        # TODO if roll present, show it instead
+        return render(self.request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        # TODO handle post
+        return HttpResponse("")
+
+
+def make_random_roll_pill(request):
+    roll = random.randint(1, 20)
+    if roll == 1:
+        bg = "bg-black"
+    elif roll <= 4:
+        bg = "bg-danger"
+    elif roll <= 8:
+        bg = "bg-warning"
+    elif roll <= 13:
+        bg = "bg-light"
+    elif roll <= 18:
+        bg = "bg-success"
+    elif roll <= 20:
+        bg = "bg-info"
+    else:
+        return HttpResponse("")
+    pill = (f'<p class="form-label">Roll:</p>'
+            f'<input type="hidden" name="roll" value="{roll}">'
+            f'<div class="rounded-pill {bg} text-center font-weight-bold h2 w-25">{roll}</div>'
+            f'<p class="form-text text-info">The roll has been added to your post</p>')
+    return HttpResponse(pill)
