@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db.models.aggregates import Count
+from django.http.request import QueryDict
 from django.http.response import HttpResponse
 from django.template.defaultfilters import slugify
 from django.urls.base import reverse_lazy
@@ -277,40 +278,53 @@ class AddRollView(UserPassesTestMixin, View):
 def make_random_roll():
     return random.randint(1, 20)
 
-def new_roll(request, post_slug, roll_type):
+class NewRollView(UserPassesTestMixin, View):
+
+    def test_func(self):
+        return True
+
     # create an additional empty roll
-    if request.method == 'POST':
-        post = get_object_or_404(Post, slug=post_slug)
-        if post.rolls.count() >= settings.MAX_ROLLS_PER_POST:
-            messages.warning(request, f"You have reached the current limit of rolls per post of {settings.MAX_ROLLS_PER_POST}. If you still need more, contact an administrator. ")
+    def post(self, *args, **kwargs):
+        post = get_object_or_404(Post, slug=self.kwargs['post_slug'])
+        if post.rolls.filter(roll_type='success').count() >= settings.MAX_SUCCESS_ROLLS_PER_POST or post.rolls.filter(roll_type='secrecy').count() >= settings.MAX_SECRECY_ROLLS_PER_POST:
+            messages.warning(self.request, f"You have reached the current limit of rolls per post of {settings.MAX_ROLLS_PER_POST}. If you still need more, please contact an administrator. ")
             return HttpResponse("", headers={"HX-Refresh": "true"})
-        roll = Roll(post=post, roll_type=roll_type, roll=make_random_roll())
+        roll = Roll(post=post, roll_type=self.kwargs['roll_type'], roll=make_random_roll())
         roll.save()
         context = {
             "roll": roll,
+            "post_slug": post.slug,
             "roll_pk": roll.pk,
         }
-        if roll_type == 'success':
-            return render(request, "news/parts/components/roll_pills/happy_pill.html", context)
-        elif roll_type == 'secrecy':
-            return render(request, "news/parts/components/roll_pills/happy_pill.html", context)
+        return render(self.request, "news/parts/components/roll_pills/happy_pill.html", context)
     # delete an empty roll
-    elif request.method == 'DELETE':
-        pass
+    def delete(self, *args, **kwargs):
+        pk = QueryDict(self.request.body).get('pk', None)
+        post = get_object_or_404(Post, slug=self.kwargs['post_slug'])
+        roll = get_object_or_404(Roll, pk=pk)\
 
-def roll_and_make_description(request, post_slug, roll_pk):
-    if request.method == 'GET':
-        # TODO make a roll
-        roll = 0
+        if (post.roll_type == "success" and post.requires_success_roll() and post.rolls.filter(roll_type=roll.roll_type).count() == 1) or \
+            (post.roll_type == "secrecy" and post.requires_secrecy_roll() and post.rolls.filter(roll_type=roll.roll_type).count() == 1):
+            messages.warning(self.request,
+                             f"This roll cannot be deleted. This post specifically requires at least one roll of this type.")
+            return HttpResponse("", headers={"HX-Refresh": "true"})
+
+        roll.delete()
+
+
+class DescriptionView(UserPassesTestMixin, View):
+    def test_func(self):
+        return True
+
+    def get(self, *args, **kwargs):
         context = {
-            "post_slug": post_slug,
-            "roll_pk": roll_pk,
-            "roll": roll,
+            'post_slug': self.kwargs['post_slug'],
+            'roll': get_object_or_404(Roll, pk=self.kwargs['roll_pk']),
         }
-        return render(request, "news/parts/roll_description_form.html", context)
+        return render(self.request, "news/parts/roll_description_form.html", context)
 
-    elif request.method == 'POST':
-        roll = get_object_or_404(Roll, pk=roll_pk)
-        roll.roll_description = request.POST['description']
+    def post(self, *args, **kwargs):
+        roll = get_object_or_404(Roll, pk=self.kwargs['roll_pk'])
+        roll.roll_description = self.request.POST['description']
         roll.save()
         return HttpResponse("")

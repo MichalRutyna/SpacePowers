@@ -1,4 +1,6 @@
 {% load choose_bg %}
-<button class="rounded-pill btn hover_darken_content roll_btn {% choose_bg roll.roll %} text-center font-weight-bold h2 w-25 m-1">
+<button class="rounded-pill btn hover_darken_content roll_btn {% choose_bg roll.roll %} text-center font-weight-bold h2 w-25 m-1"
+        hx-get="{% url "b:news:description" post_slug roll.pk %}"
+        hx-target="#description_form">
     {{roll.roll}}
 </button>

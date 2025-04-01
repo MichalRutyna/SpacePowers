@@ -15,28 +15,32 @@
         </ul>
     {% endif %}
 
-    <div>
-        <h1>Success rolls:</h1>
-        <div class="d-flex flex-row" id="success_rolls">
-            {% for roll in success_rolls %}
-                    {% if not roll.roll %}
-                        {% include "news/parts/components/roll_pills/no_success_roll_pill.html" %}
-                    {% else %}
-                        {% include "news/parts/components/roll_pills/happy_pill.html" %}
-                    {% endif %}
-            {% endfor %}
-            {% include "news/parts/components/roll_pills/additional_success_roll_button.html" %}
+    <div class="bg-dark p-2 rounded-2">
+        <div class="p-2">
+            <h1 class="text-center">Success rolls:</h1>
+            <div class="d-flex flex-row" id="success_rolls">
+                {% for roll in success_rolls %}
+                        {% if not roll.roll %}
+                            {% include "news/parts/components/roll_pills/no_success_roll_pill.html" %}
+                        {% else %}
+                            {% include "news/parts/components/roll_pills/happy_pill.html" %}
+                        {% endif %}
+                {% endfor %}
+                {% include "news/parts/components/roll_pills/additional_success_roll_button.html" %}
+            </div>
         </div>
-        <h1>Secrecy rolls:</h1>
-        <div class="d-flex flex-row" id="secrecy_rolls">
-            {% for roll in secrecy_rolls %}
-                    {% if not roll.roll %}
-                        {% include "news/parts/components/roll_pills/no_secrecy_roll_pill.html" %}
-                    {% else %}
-                        {% include "news/parts/components/roll_pills/happy_pill.html" %}
-                    {% endif %}
-            {% endfor %}
-            {% include "news/parts/components/roll_pills/additional_secrecy_roll_button.html" %}
+        <div class="border-top p-2">
+            <h1 class="text-center">Secrecy rolls:</h1>
+            <div class="d-flex flex-row" id="secrecy_rolls">
+                {% for roll in secrecy_rolls %}
+                        {% if not roll.roll %}
+                            {% include "news/parts/components/roll_pills/no_secrecy_roll_pill.html" %}
+                        {% else %}
+                            {% include "news/parts/components/roll_pills/happy_pill.html" %}
+                        {% endif %}
+                {% endfor %}
+                {% include "news/parts/components/roll_pills/additional_secrecy_roll_button.html" %}
+            </div>
         </div>
         {% if has_unrolled %}
             <div class="row my-1" >
@@ -44,6 +48,9 @@
                     hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll">Roll all</button>
             </div>
         {% endif %}
+    </div>
+    <div id="description_form">
+
     </div>
 
 {% endblock %}
