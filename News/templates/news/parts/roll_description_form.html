@@ -27,7 +27,7 @@
         <div class="mb-1 h-25 p-4">
             <div id="div_id_description" class="mb-3">
                 <label for="id_description" class="form-label requiredField"> Description:</label>
-                <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">{{ roll.roll_description }}</textarea>
+                <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">{% if roll.roll_description %} {{ roll.roll_description }} {% endif %}</textarea>
             </div>
         </div>
         <div class="row p-2">

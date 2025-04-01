@@ -264,8 +264,7 @@ class AddRollView(UserPassesTestMixin, View):
             "success_rolls": post_object.get_success_rolls(),
             "secrecy_rolls": post_object.get_secrecy_rolls(),
             "has_unrolled": post_object.has_unrolled_rolls(),
-            "post_slug": post_slug,
-            "post_title": post_object.title,
+            "post": post_object,
         }
 
         return render(self.request, self.template_name, context)
@@ -287,7 +286,7 @@ class NewRollView(UserPassesTestMixin, View):
     def post(self, *args, **kwargs):
         post = get_object_or_404(Post, slug=self.kwargs['post_slug'])
         if post.rolls.filter(roll_type='success').count() >= settings.MAX_SUCCESS_ROLLS_PER_POST or post.rolls.filter(roll_type='secrecy').count() >= settings.MAX_SECRECY_ROLLS_PER_POST:
-            messages.warning(self.request, f"You have reached the current limit of rolls per post of {settings.MAX_ROLLS_PER_POST}. If you still need more, please contact an administrator. ")
+            messages.warning(self.request, f"You have reached the current limit of rolls of this type per post. If you need more, please contact an administrator. ")
             return HttpResponse("", headers={"HX-Refresh": "true"})
         roll = Roll(post=post, roll_type=self.kwargs['roll_type'], roll=make_random_roll())
         roll.save()
