@@ -1,7 +1,6 @@
 
 <form class="bg-dark p-2 rounded-2 mt-5" id="id-rolls-form"
-      hx-post="{% url "b:news:description" post_slug roll.pk %}"
-      hx-vals="">
+      hx-post="{% url "b:news:description" post_slug roll.pk %}">
         {% csrf_token %}
         {% load choose_bg %}
 
@@ -28,7 +27,7 @@
         <div class="mb-1 h-25 p-4">
             <div id="div_id_description" class="mb-3">
                 <label for="id_description" class="form-label requiredField"> Description:</label>
-                <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description"></textarea>
+                <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">{{ roll.roll_description }}</textarea>
             </div>
         </div>
         <div class="row p-2">

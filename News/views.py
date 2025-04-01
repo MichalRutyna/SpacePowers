@@ -327,4 +327,4 @@ class DescriptionView(UserPassesTestMixin, View):
         roll = get_object_or_404(Roll, pk=self.kwargs['roll_pk'])
         roll.roll_description = self.request.POST['description']
         roll.save()
-        return HttpResponse("")
+        return HttpResponse("<h1 class='text-center text-success'>Saved!</h1>")
