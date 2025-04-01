@@ -4,12 +4,36 @@
 {% block title %}Add roll{% endblock %}
 
 {% block content %}
-    <style>
-        .asteriskField {
-            display: none;
-        }
-    </style>
 
-    {% crispy form %}
+    {% for roll in success_rolls %}
+
+        {{ roll.roll }}
+
+    {% endfor %}
+
+    <form  id="id-rolls-form" method="post" >
+        {% csrf_token %}
+        <div class="my-3 bg-dark h-25 p-4">
+        <div id="div_id_roll" class="mb-3">
+            <label for="id_roll" class="form-label requiredField">Roll:</label>
+            <input type="text" name="roll" class="w-25 textinput form-control" style="cursor: not-allowed" onmousedown="return false;" onbeforeinput="return false;" required id="id_roll">
+            <div id="id_roll_helptext" class="form-text">Roll by pressing the button below. The roll will be automatically submitted.</div>
+        </div>
+        <div id="div_id_description" class="mb-3">
+            <label for="id_description" class="form-label requiredField"> Description:</label>
+            <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">
+            </textarea>
+        </div>
+        </div>
+        <div class="row my-1" >
+            <input type="button" name="roll" value="Roll!" class="btn btn-primary ms-auto me-auto w-25" id="button-id-roll"
+                   hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll" />
+        </div>
+        <div class="row p-2">
+            <input type="reset" name="reset" value="Cancel"
+                   class="btn btn-inverse btn-outline-danger w-auto me-auto"id="reset-id-reset" />
+            <input type="submit" name="submit" value="Submit description" class="btn btn-primary btn-success w-25" id="submit-id-submit" />
+        </div>
+    </form>
 
 {% endblock %}

@@ -1,6 +1,4 @@
-from django.contrib import admin
-
-from .models import Nation, Army
+from .models import Nation
 from .admin_inlines import *
 
 

@@ -55,10 +55,6 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tags')
 
-    success_roll = models.IntegerField(null=True, blank=True, verbose_name='Success roll')
-    success_roll_description = models.TextField(null=True, blank=True, verbose_name='Success roll description')
-    secrecy_roll = models.IntegerField(null=True, blank=True, verbose_name='Secrecy roll')
-    secrecy_roll_description = models.TextField(null=True, blank=True, verbose_name='Secrecy roll description')
     # overrides for requirements
     success_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Success roll override')
     secrecy_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Secrecy roll override')
@@ -82,6 +78,12 @@ class Post(models.Model):
             return self.secrecy_roll_override
         return self.tags.filter(secrecy_roll_required=True).exists()
 
+    def get_success_rolls(self):
+        return self.rolls.filter(roll_type=Roll.RollTypes.SUCCESS)
+
+    def get_secrecy_rolls(self):
+        return self.rolls.filter(roll_type=Roll.RollTypes.SECRECY)
+
     def __str__(self):
         return self.title
 
@@ -92,6 +94,19 @@ class Post(models.Model):
         verbose_name = 'Post(s)'
         verbose_name_plural = 'Posts'
         ordering = ['-created_at']
+
+class Roll(models.Model):
+
+    class RollTypes(models.TextChoices):
+        SUCCESS = 'success', "Success"
+        SECRECY = 'secrecy', "Secrecy"
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='rolls', related_query_name="rolls", verbose_name='Post')
+    roll = models.IntegerField(verbose_name='Roll value')
+    roll_description = models.TextField(null=True, blank=True, verbose_name='Roll description')
+    roll_type = models.CharField(max_length=255, choices=RollTypes.choices, default=RollTypes.SUCCESS, verbose_name='Roll type')
+
+
 
 
 class Comment(models.Model):

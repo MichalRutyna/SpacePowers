@@ -235,26 +235,27 @@ class AddPostView(UserPassesTestMixin, CreateView):
         form.instance.slug = slugify(form.cleaned_data['title'])
         form.instance.author = self.request.user
         form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
-        form.instance.roll = random.randint(1, 20)
         return super().form_valid(form)
 
 class AddRollView(UserPassesTestMixin, View):
     form_class = RollsForm
     template_name = 'news/pages/add_roll.html'
 
-    def __init__(self):
-        super().__init__()
-
     errors = []
     def test_func(self):
         return True
 
     def get(self, *args, **kwargs):
-        success_url = reverse_lazy("b:news:post", kwargs={'slug': self.kwargs['post_slug']})
+        post_slug = self.kwargs['post_slug']
+        post_object = Post.objects.get(slug=post_slug)
+        success_url = reverse_lazy("b:news:post", kwargs={'slug': post_slug})
         context = {
             "form": self.form_class(),
+            "success_roll_required": post_object.requires_success_roll(),
+            "secret_roll_required": post_object.requires_secrecy_roll(),
+            "success_rolls": post_object.get_secrecy_rolls(),
         }
-        # TODO if roll present, show it instead
+
         return render(self.request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -262,22 +263,10 @@ class AddRollView(UserPassesTestMixin, View):
         # TODO handle post
         return HttpResponse("")
 
-
 def make_random_roll_pill(request):
+    from News.templatetags.choose_bg import choose_bg
     roll = random.randint(1, 20)
-    if roll == 1:
-        bg = "bg-black"
-    elif roll <= 4:
-        bg = "bg-danger"
-    elif roll <= 8:
-        bg = "bg-warning"
-    elif roll <= 13:
-        bg = "bg-light"
-    elif roll <= 18:
-        bg = "bg-success"
-    elif roll <= 20:
-        bg = "bg-info"
-    else:
+    if not (bg := choose_bg(roll)):
         return HttpResponse("")
     pill = (f'<p class="form-label">Roll:</p>'
             f'<input type="hidden" name="roll" value="{roll}">'

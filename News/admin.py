@@ -3,6 +3,10 @@ from django.utils.html import format_html, mark_safe, format_html_join
 
 from .models import *
 
+class RollInLine(admin.TabularInline):
+    model = Roll
+    extra = 0
+    fields = ['roll', 'roll_description', 'roll_type']
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
@@ -13,8 +17,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('category', 'tags', 'nation', 'author', 'created_at', 'is_published')
     readonly_fields = ('views', 'created_at', 'seen_by', 'comments')
-    #fields =  [('title', 'slug', 'author', 'nation',  'category', 'tags'), 'content', ('success_roll', 'success_roll_description'), ('secrecy_roll', 'secrecy_roll_description'), 'comments', ()]
-    #filter_horizontal = ["tags"]
+    inlines = [RollInLine,]
     list_editable = ('is_published',)
     view_on_site = True
 
@@ -23,18 +26,6 @@ class PostAdmin(admin.ModelAdmin):
             None,
             {
                 "fields": ["title", ("author", "nation"), "tags", "content"]
-            }
-        ),
-        (
-           "Success roll",
-           {
-               "fields": [("success_roll", "success_roll_description")]
-           }
-        ),
-        (
-            "Secrecy roll",
-            {
-                "fields": [("secrecy_roll", "secrecy_roll_description")]
             }
         ),
         (

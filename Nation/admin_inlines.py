@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Unit, Army, Ownership
+from Nation.models import Unit, Army, Ownership
 
 
 class UnitInLine(admin.TabularInline):

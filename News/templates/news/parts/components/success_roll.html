@@ -1,6 +1,6 @@
-
 <li class="roll list-group-item">
-    <span class="badge bg-success" id="roll">
+    {% load choose_bg %}
+    <span class="badge {% choose_bg roll %}" id="roll">
         {% if roll and description %}
             {{ roll }}
         {% else %}

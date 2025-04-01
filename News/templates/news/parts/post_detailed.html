@@ -31,15 +31,19 @@
 {% block rolls %}
     <ul class="list-group list-group-flush">
         {% if post.requires_success_roll %}
-            {% with roll=post.success_roll description=post.success_roll_description %}
-                {% include "news/parts/components/success_roll.html" %}
-            {% endwith %}
+            {% for roll in post.get_success_rolls %}
+                {% with roll=roll.roll description=roll.roll_description %}
+                    {% include "news/parts/components/success_roll.html" %}
+                {% endwith %}
+            {% endfor %}
         {% endif %}
 
         {% if post.requires_secrecy_roll %}
-            {% with roll=post.secrecy_roll description=post.secrecy_roll_description %}
-                {% include "news/parts/components/secrecy_roll.html" %}
-            {% endwith %}
+            {% for roll in post.get_secrecy_rolls %}
+                {% with roll=roll.roll description=roll.roll_description %}
+                    {% include "news/parts/components/secrecy_roll.html" %}
+                {% endwith %}
+            {% endfor %}
         {% endif %}
     </ul>
 {% endblock %}
