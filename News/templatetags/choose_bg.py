@@ -4,6 +4,8 @@ register = template.Library()
 
 @register.simple_tag()
 def choose_bg(roll):
+    if not roll:
+        return "bg-primary"
     if roll == 1:
         bg = "bg-black"
     elif roll <= 4:
@@ -17,7 +19,7 @@ def choose_bg(roll):
     elif roll <= 20:
         bg = "bg-info"
     else:
-        return None
+        bg = "bg-primary"
     return bg
 
 

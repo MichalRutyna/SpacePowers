@@ -1,39 +1,45 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Add roll{% endblock %}
+{% block title %}{{ post_title }}{% endblock %}
 
 {% block content %}
 
-    {% for roll in success_rolls %}
+{#    TODO add post preview #}
 
-        {{ roll.roll }}
-
-    {% endfor %}
-
-    <form  id="id-rolls-form" method="post" >
-        {% csrf_token %}
-        <div class="my-3 bg-dark h-25 p-4">
-        <div id="div_id_roll" class="mb-3">
-            <label for="id_roll" class="form-label requiredField">Roll:</label>
-            <input type="text" name="roll" class="w-25 textinput form-control" style="cursor: not-allowed" onmousedown="return false;" onbeforeinput="return false;" required id="id_roll">
-            <div id="id_roll_helptext" class="form-text">Roll by pressing the button below. The roll will be automatically submitted.</div>
+    <div>
+        <h1>Success rolls:</h1>
+        <div class="d-flex flex-row" id="success_rolls">
+            {% for roll in success_rolls %}
+                {% with roll_type='success' %}
+                    {% if not roll.roll %}
+                        {% include "news/parts/components/roll_pills/no_roll_pill.html" %}
+                    {% else %}
+                        {% include "news/parts/components/roll_pills/happy_pill.html" %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+            {% include "news/parts/components/roll_pills/additional_roll_button.html" %}
         </div>
-        <div id="div_id_description" class="mb-3">
-            <label for="id_description" class="form-label requiredField"> Description:</label>
-            <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">
-            </textarea>
+        <h1>Secrecy rolls:</h1>
+        <div class="d-flex flex-row" id="secrecy_rolls">
+            {% for roll in secrecy_rolls %}
+                {% with roll_type='secrecy' %}
+                    {% if not roll.roll %}
+                        {% include "news/parts/components/roll_pills/no_roll_pill.html" %}
+                    {% else %}
+                        {% include "news/parts/components/roll_pills/happy_pill.html" %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+            {% include "news/parts/components/roll_pills/additional_roll_button.html" %}
         </div>
-        </div>
-        <div class="row my-1" >
-            <input type="button" name="roll" value="Roll!" class="btn btn-primary ms-auto me-auto w-25" id="button-id-roll"
-                   hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll" />
-        </div>
-        <div class="row p-2">
-            <input type="reset" name="reset" value="Cancel"
-                   class="btn btn-inverse btn-outline-danger w-auto me-auto"id="reset-id-reset" />
-            <input type="submit" name="submit" value="Submit description" class="btn btn-primary btn-success w-25" id="submit-id-submit" />
-        </div>
-    </form>
+        {% if has_unrolled %}
+            <div class="row my-1" >
+            <button type="button" name="roll" class="btn btn-primary ms-auto me-auto w-25" id="button-id-roll"
+                    hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll">Roll all</button>
+            </div>
+        {% endif %}
+    </div>
 
 {% endblock %}

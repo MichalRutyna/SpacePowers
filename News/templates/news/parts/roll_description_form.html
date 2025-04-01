@@ -1,0 +1,15 @@
+<form id="id-rolls-form" hx-post="{% url "b:news:add_description" post_slug roll_pk %}">
+        {% csrf_token %}
+        <div class="my-3 bg-dark h-25 p-4">
+        <div id="div_id_description" class="mb-3">
+            <label for="id_description" class="form-label requiredField"> Description:</label>
+            <textarea name="description" cols="40" rows="10" class="textarea form-control" required id="id_description">
+            </textarea>
+        </div>
+        </div>
+        <div class="row p-2">
+            <input type="reset" name="reset" value="Cancel"
+                   class="btn btn-inverse btn-outline-danger w-auto me-auto" id="reset-id-reset" />
+            <input type="submit" name="submit" value="Submit description" class="btn btn-primary btn-success w-25" id="submit-id-submit" />
+        </div>
+</form>

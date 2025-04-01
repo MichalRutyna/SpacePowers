@@ -1,13 +1,10 @@
-<button class="btn btn-outline-info ms-auto m-1 hover_darken_content"
-{#        data-bs-toggle="tooltip" data-bs-placement="bottom"#}
-{#        data-bs-original-title="Create a new {{ model_slug }}"#}
-        hx-post="{% url "b:nation:edit" nation.slug %}"
-        hx-target="closest #editable"
-        hx-swap="outerHTML"
-        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-        hx-vals='{"field_slugs": {{ field_slugs }}, "model_slug": "{{ model_slug }}", "parent_model_slug": "{{ parent_model_slug }}", "parent_pk": "{{ parent_pk }}"}'>
-    <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-    <svg width="17px" height="20px" viewBox="-2 4 34 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
+ <button class="rounded-circle btn btn-outline-info m-1 px-3 hover_darken_content"
+         hx-post="{% url "b:news:add_roll" post_slug %}"
+         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+         hx-swap="beforebegin"
+         hx-confirm='You are about to add a roll to your post. Only an administrator can undo this action. Are you sure?'>
+     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+    <svg width="14px" height="25px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
             <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-360.000000, -1035.000000)"
@@ -18,5 +15,4 @@
             </g>
         </g>
     </svg>
-
 </button>

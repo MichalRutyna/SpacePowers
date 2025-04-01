@@ -30,6 +30,11 @@ footer {
     filter: brightness(80%);
 }
 
+.hover_darken_content.roll_btn:hover {
+    transition: 0.3s;
+    filter: brightness(80%);
+}
+
 .post-title:hover {
     filter: brightness(80%);
 }

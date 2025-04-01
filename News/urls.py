@@ -16,6 +16,7 @@ urlpatterns = [
     path('post/<slug:post_slug>/add_comment/', add_comment, name='add_comment'),
     path('create_post/', AddPostView.as_view(), name='create_post'),
     path('post/<str:post_slug>/add_roll', login_required(AddRollView.as_view()), name='add_roll'),
-    path('random_roll', make_random_roll_pill, name='random_roll'),
+    path('post/<str:post_slug>/new_roll', login_required(new_roll), name='new_roll'),
+    path('post/<str:post_slug>/roll/<int:roll_pk>/description', roll_and_make_description, name='add_description'),
     path('post/<str:slug>/', GetPost.as_view(), name='post'),
 ]

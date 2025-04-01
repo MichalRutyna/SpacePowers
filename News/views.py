@@ -14,7 +14,7 @@ from django.views.generic.edit import CreateView
 
 from django.conf import settings
 from .forms import CommentForm, PostForm, RollsForm
-from .models import Post, Category, Tag, Comment
+from .models import Post, Category, Tag, Comment, Roll
 from Nation.models import Nation
 
 from django.db.models import F
@@ -229,16 +229,23 @@ class AddPostView(UserPassesTestMixin, CreateView):
         context = {"error": "forbidden",
                    "message": "You cannot create a post!<br>" + self.errors[0]}
 
-        return render(self.request, 'errors/../templates/forbidden.html', context)
+        return render(self.request, '403.html', context)
 
     def form_valid(self, form):
         form.instance.slug = slugify(form.cleaned_data['title'])
         form.instance.author = self.request.user
-        form.instance.category = Category.objects.get(slug=settings.CURRENT_CATEGORY_SLUG)
-        return super().form_valid(form)
+        form.instance.category = get_object_or_404(Category, slug=settings.CURRENT_CATEGORY_SLUG)
+        x = super().form_valid(form)
+        if self.object.requires_success_roll():
+            Roll(post=self.object, roll_type='success').save()
+        if self.object.requires_secrecy_roll():
+            Roll(post=self.object, roll_type='secrecy').save()
+        return x
+
+# TODO secure all views below this
 
 class AddRollView(UserPassesTestMixin, View):
-    form_class = RollsForm
+    # TODO change into template view?
     template_name = 'news/pages/add_roll.html'
 
     errors = []
@@ -247,13 +254,16 @@ class AddRollView(UserPassesTestMixin, View):
 
     def get(self, *args, **kwargs):
         post_slug = self.kwargs['post_slug']
-        post_object = Post.objects.get(slug=post_slug)
+        post_object = get_object_or_404(Post, slug=post_slug)
         success_url = reverse_lazy("b:news:post", kwargs={'slug': post_slug})
         context = {
-            "form": self.form_class(),
             "success_roll_required": post_object.requires_success_roll(),
             "secret_roll_required": post_object.requires_secrecy_roll(),
-            "success_rolls": post_object.get_secrecy_rolls(),
+            "success_rolls": post_object.get_success_rolls(),
+            "secrecy_rolls": post_object.get_secrecy_rolls(),
+            "has_unrolled": post_object.has_unrolled_rolls(),
+            "post_slug": post_slug,
+            "post_title": post_object.title,
         }
 
         return render(self.request, self.template_name, context)
@@ -263,13 +273,27 @@ class AddRollView(UserPassesTestMixin, View):
         # TODO handle post
         return HttpResponse("")
 
-def make_random_roll_pill(request):
-    from News.templatetags.choose_bg import choose_bg
-    roll = random.randint(1, 20)
-    if not (bg := choose_bg(roll)):
+def new_roll(request, post_slug):
+    # create an additional empty roll
+    if request.method == 'POST':
+        return render(request, "news/parts/components/roll_pills/no_roll_pill.html")
+    # delete an empty roll
+    elif request.method == 'DELETE':
+        pass
+
+def roll_and_make_description(request, post_slug, roll_pk):
+    if request.method == 'GET':
+        # TODO make a roll
+        roll = 0
+        context = {
+            "post_slug": post_slug,
+            "roll_pk": roll_pk,
+            "roll": roll,
+        }
+        return render(request, "news/parts/roll_description_form.html", context)
+
+    elif request.method == 'POST':
+        roll = get_object_or_404(Roll, pk=roll_pk)
+        roll.roll_description = request.POST['description']
+        roll.save()
         return HttpResponse("")
-    pill = (f'<p class="form-label">Roll:</p>'
-            f'<input type="hidden" name="roll" value="{roll}">'
-            f'<div class="rounded-pill {bg} text-center font-weight-bold h2 w-25">{roll}</div>'
-            f'<p class="form-text text-info">The roll has been added to your post</p>')
-    return HttpResponse(pill)
