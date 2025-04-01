@@ -7,32 +7,36 @@
 
 {#    TODO add post preview #}
 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div>
         <h1>Success rolls:</h1>
         <div class="d-flex flex-row" id="success_rolls">
             {% for roll in success_rolls %}
-                {% with roll_type='success' %}
                     {% if not roll.roll %}
-                        {% include "news/parts/components/roll_pills/no_roll_pill.html" %}
+                        {% include "news/parts/components/roll_pills/no_success_roll_pill.html" %}
                     {% else %}
                         {% include "news/parts/components/roll_pills/happy_pill.html" %}
                     {% endif %}
-                {% endwith %}
             {% endfor %}
-            {% include "news/parts/components/roll_pills/additional_roll_button.html" %}
+            {% include "news/parts/components/roll_pills/additional_success_roll_button.html" %}
         </div>
         <h1>Secrecy rolls:</h1>
         <div class="d-flex flex-row" id="secrecy_rolls">
             {% for roll in secrecy_rolls %}
-                {% with roll_type='secrecy' %}
                     {% if not roll.roll %}
-                        {% include "news/parts/components/roll_pills/no_roll_pill.html" %}
+                        {% include "news/parts/components/roll_pills/no_secrecy_roll_pill.html" %}
                     {% else %}
                         {% include "news/parts/components/roll_pills/happy_pill.html" %}
                     {% endif %}
-                {% endwith %}
             {% endfor %}
-            {% include "news/parts/components/roll_pills/additional_roll_button.html" %}
+            {% include "news/parts/components/roll_pills/additional_secrecy_roll_button.html" %}
         </div>
         {% if has_unrolled %}
             <div class="row my-1" >

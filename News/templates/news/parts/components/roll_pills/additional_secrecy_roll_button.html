@@ -1,5 +1,5 @@
- <button class="rounded-circle btn btn-outline-info m-1 px-3 hover_darken_content"
-         hx-post="{% url "b:news:add_roll" post_slug %}"
+ <button class="rounded-circle btn btn-outline-info m-1 px-3 hover_darken_content ms-auto"
+         hx-post="{% url "b:news:new_roll" post_slug "secrecy" %}"
          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
          hx-swap="beforebegin"
          hx-confirm='You are about to add a roll to your post. Only an administrator can undo this action. Are you sure?'>

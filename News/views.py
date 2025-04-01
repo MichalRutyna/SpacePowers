@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.db.models.aggregates import Count
 from django.http.response import HttpResponse
 from django.template.defaultfilters import slugify
@@ -273,10 +274,26 @@ class AddRollView(UserPassesTestMixin, View):
         # TODO handle post
         return HttpResponse("")
 
-def new_roll(request, post_slug):
+def make_random_roll():
+    return random.randint(1, 20)
+
+def new_roll(request, post_slug, roll_type):
     # create an additional empty roll
     if request.method == 'POST':
-        return render(request, "news/parts/components/roll_pills/no_roll_pill.html")
+        post = get_object_or_404(Post, slug=post_slug)
+        if post.rolls.count() >= settings.MAX_ROLLS_PER_POST:
+            messages.warning(request, f"You have reached the current limit of rolls per post of {settings.MAX_ROLLS_PER_POST}. If you still need more, contact an administrator. ")
+            return HttpResponse("", headers={"HX-Refresh": "true"})
+        roll = Roll(post=post, roll_type=roll_type, roll=make_random_roll())
+        roll.save()
+        context = {
+            "roll": roll,
+            "roll_pk": roll.pk,
+        }
+        if roll_type == 'success':
+            return render(request, "news/parts/components/roll_pills/happy_pill.html", context)
+        elif roll_type == 'secrecy':
+            return render(request, "news/parts/components/roll_pills/happy_pill.html", context)
     # delete an empty roll
     elif request.method == 'DELETE':
         pass
