@@ -3,8 +3,10 @@
     {% if user.is_authenticated %}
         <h1> {{ intro }}
         </h1>
-        <br>
 
+        <a href="{% url "b:news:unpublished" %}" class="btn btn-primary btn-lg my-3">Unpublished posts</a>
+
+        <br>
         You've been with us since {{ user.date_joined|date:"d.m.Y G:i" }}! <br>
         {% if nation_count %}
             You've managed to control {{ nation_count }} nations!

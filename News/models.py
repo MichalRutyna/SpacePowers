@@ -87,6 +87,9 @@ class Post(models.Model):
     def has_unrolled_rolls(self):
         return self.rolls.filter(roll=None).exists()
 
+    def has_rolls_without_description(self):
+        return self.rolls.filter(roll_description=None).exists()
+
     def __str__(self):
         return self.title
 
