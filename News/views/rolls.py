@@ -14,9 +14,9 @@ from News.models import Roll, Post
 
 # TODO secure all views below this
 
-class AddRollView(UserPassesTestMixin, View):
+class RollsPageView(UserPassesTestMixin, View):
     # TODO change into template view?
-    template_name = 'news/pages/add_roll.html'
+    template_name = 'news/pages/rolls_page.html'
 
     errors = []
     def test_func(self):
@@ -94,5 +94,5 @@ class DescriptionView(UserPassesTestMixin, View):
         roll = get_object_or_404(Roll, pk=self.kwargs['roll_pk'])
         roll.roll_description = self.request.POST['description']
         roll.save()
-        return HttpResponse("<h1 class='text-center text-success'>Saved!</h1>")
+        return HttpResponse("<h1 class='text-center text-success'>Saved!</h1>", headers={"HX-Refresh": "true"})
 

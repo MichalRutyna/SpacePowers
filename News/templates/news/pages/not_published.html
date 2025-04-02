@@ -29,7 +29,7 @@
 
         {% if posts %}
             {% for post in posts %}
-                {% include "news/parts/post_no_content.html" %}
+                {% include "news/parts/post_no_content_unpublished_reason.html" %}
             {% endfor %}
         {% else %}
             <h1 class="text-center text-success mt-5">There are no urgent matters to attend to!</h1>

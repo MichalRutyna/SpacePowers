@@ -1,0 +1,7 @@
+{# Used in the list of unpublished posts #}
+
+{% extends "news/parts/post_no_content.html" %}
+
+{% block reason %}
+    <span class="text-danger float-end">{{ post.unpublished_reason | safe }}</span>
+{% endblock %}

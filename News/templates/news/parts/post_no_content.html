@@ -1,4 +1,4 @@
-{# Used in the list of unpublished posts #}
+{# Not used #}
 
 <div class="card mb-3 post p-0">
 
@@ -12,7 +12,8 @@
         <h5 class="card-title m-0">
             <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7 }}</a>
             {% include "news/parts/components/tags.html" %}
-            <span class="text-danger float-end">Missing required roll</span>
+            {% block reason %}
+            {% endblock %}
         </h5>
     </div>
 
