@@ -1,0 +1,25 @@
+{# Used in the list of unpublished posts #}
+
+<div class="card mb-3 post p-0">
+
+    <a href="{{ post.get_absolute_url }}">
+        <h3 class="card-header text-body post-title">
+            {{ post.title|truncatewords_html:15 }}
+        </h3>
+    </a>
+
+    <div class="card-body">
+        <h5 class="card-title m-0">
+            <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7 }}</a>
+            {% include "news/parts/components/tags.html" %}
+            <span class="text-danger float-end">Missing required roll</span>
+        </h5>
+    </div>
+
+    <div class="card-footer text-muted">
+                <span class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                      data-bs-original-title="{{ post.created_at|date:"d.m.Y G:i" }}">
+                {{ post.created_at|timesince }} ago</span>
+    </div>
+
+</div>

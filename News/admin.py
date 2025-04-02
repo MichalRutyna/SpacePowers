@@ -7,6 +7,7 @@ class RollInLine(admin.TabularInline):
     model = Roll
     extra = 0
     fields = ['roll', 'roll_description', 'roll_type']
+    classes = ['collapse']
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
@@ -43,7 +44,7 @@ class PostAdmin(admin.ModelAdmin):
         (
             "Advanced settings",
             {
-                "fields": ["slug", "category", ("success_roll_override", "secrecy_roll_override")],
+                "fields": ["slug", "category", "is_published", ("success_roll_override", "secrecy_roll_override")],
                 "classes": ("collapse",),
             }
         )
