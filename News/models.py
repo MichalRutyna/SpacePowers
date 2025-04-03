@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from martor.models import MartorField
 
 from Nation.models import Nation
 
@@ -44,7 +45,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, unique=True, verbose_name='Link')
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, verbose_name='Author')
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Nation')
-    content = models.TextField(blank=True, verbose_name='Content')
+    content = MartorField(blank=True, verbose_name='Content')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Published')
 

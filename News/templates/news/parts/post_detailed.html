@@ -2,6 +2,9 @@
 
 {% extends "news/parts/post_overwiewed.html" %}
 
+{% load static %}
+{% load martortags %}
+
 {# Title no longer links to the post #}
 {% block title_link %}
     <h3 class="card-header">
@@ -23,7 +26,7 @@
 {# content is no longer truncated #}
 {% block content %}
     <p class="card-text">
-        {{ post.content }}
+        {{ post.content | safe_markdown }}
     </p>
 {% endblock %}
 

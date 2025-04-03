@@ -1,5 +1,6 @@
 import django.forms as forms
 from crispy_forms.helper import FormHelper
+from martor.fields import MartorFormField
 from crispy_forms.layout import Submit, Reset, Button, ButtonHolder, Row, Layout, Div, Field, HTML, Template
 from django.urls.base import reverse_lazy
 
@@ -27,6 +28,8 @@ class CommentForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+
+    content = MartorFormField()
 
     class Meta:
         model = Post
