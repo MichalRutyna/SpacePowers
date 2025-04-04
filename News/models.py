@@ -41,7 +41,7 @@ class Tag(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Name')
+    title = models.CharField(max_length=255, verbose_name='Title')
     slug = models.SlugField(max_length=255, unique=True, verbose_name='Link')
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, verbose_name='Author')
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Nation')

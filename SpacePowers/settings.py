@@ -218,7 +218,7 @@ MARTOR_THEME = 'bootstrap'
 MARTOR_ENABLE_CONFIGS = {
     'emoji': 'true',        # to enable/disable emoji icons.
     'imgur': 'true',        # to enable/disable imgur/custom uploader.
-    'mention': 'false',     # to enable/disable mention
+    'mention': 'true',     # to enable/disable mention
     'jquery': 'true',       # to include/revoke jquery (require for admin default django)
     'living': 'false',      # to enable/disable live updates in preview
     'spellcheck': 'false',  # to enable/disable spellcheck in form textareas
@@ -280,7 +280,7 @@ MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
 MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
 
-MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://127.0.0.1:8000/'                                      # TODO please change this to your domain
+MARTOR_MARKDOWN_BASE_MENTION_URL = 'http://127.0.0.1:8000/account/'                                      # TODO please change this to your domain
 
 # If you need to use your own themed "bootstrap" or "semantic ui" dependency
 # replace the values with the file in your static files dir
