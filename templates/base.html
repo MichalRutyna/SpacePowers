@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all"  />
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
     <script type="text/javascript" src='{% static 'js/jquery.js' %}'></script>
-    {% bootstrap_javascript %}
+    {% block boostrap_js %}
+        {% bootstrap_javascript %}
+    {% endblock %}
 </head>
 
 <body>

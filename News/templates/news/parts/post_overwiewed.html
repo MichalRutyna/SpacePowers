@@ -1,6 +1,8 @@
 {# Used in the main news page #}
 
 {% load likes_post %}
+{% load static %}
+{% load martortags %}
 
 <div class="card mb-3 post p-0">
 
@@ -25,7 +27,7 @@
     <div class="card-body">
         {% block content %}
             <p class="card-text">
-                {{ post.content | truncatewords_html:100 }}
+                {{ post.content | safe_markdown | truncatewords_html:100 }}
             </p>
         {% endblock %}
     </div>

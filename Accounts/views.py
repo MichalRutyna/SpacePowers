@@ -10,7 +10,7 @@ from .forms import password_reset_form, signup_form, login_form, password_change
 
 
 class ProfileView(TemplateView):
-    template_name = "account/profile.html"
+    template_name = "account/home_profile.html"
 
     def get_owner_titles(self):
         if self.request.user.is_authenticated:
