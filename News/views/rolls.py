@@ -50,6 +50,20 @@ class NewRollView(UserPassesTestMixin, View):
     def test_func(self):
         return True
 
+    # roll a present roll
+    def put(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, slug=self.kwargs['post_slug'])
+        data = QueryDict(self.request.body)
+        roll = get_object_or_404(Roll, pk=int(data.get('roll_pk')))
+        roll.roll = make_random_roll()
+        roll.save()
+        context = {
+            "roll": roll,
+            "post": post,
+            "roll_pk": roll.pk,
+        }
+        return render(self.request, "news/parts/components/roll_pills/happy_pill.html", context)
+
     # create an additional empty roll
     def post(self, *args, **kwargs):
         post = get_object_or_404(Post, slug=self.kwargs['post_slug'])
@@ -60,11 +74,12 @@ class NewRollView(UserPassesTestMixin, View):
         roll.save()
         context = {
             "roll": roll,
-            "post_slug": post.slug,
+            "post": post,
             "roll_pk": roll.pk,
         }
         return render(self.request, "news/parts/components/roll_pills/happy_pill.html", context)
-    # delete an empty roll
+
+    # delete an empty roll - not used currently
     def delete(self, *args, **kwargs):
         pk = QueryDict(self.request.body).get('pk', None)
         post = get_object_or_404(Post, slug=self.kwargs['post_slug'])

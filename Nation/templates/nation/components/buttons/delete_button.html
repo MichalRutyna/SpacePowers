@@ -2,7 +2,8 @@
         {#                data-bs-toggle="tooltip" data-bs-placement="bottom"#}
         {#                data-bs-original-title='Delete {{ model_slug }}'#}
         hx-delete="{% url "b:nation:edit" nation.slug %}"
-        hx-target="closest #editable">
+        hx-target="closest #editable"
+        hx-confirm='You are about to permanently remove this. Are you sure?'>
     <svg width="17px" height="17px" viewBox="0 2 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 12V17" stroke="rgba(var(--bs-danger-rgb)" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round"></path>

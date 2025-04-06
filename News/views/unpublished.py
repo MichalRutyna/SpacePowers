@@ -15,7 +15,7 @@ class UnpublishedListView(ListView):
         queryset = Post.objects.filter(is_published=False, author=self.request.user).order_by('-created_at')
         for obj in queryset:
             if obj.has_unrolled_rolls():
-                obj.unpublished_reason = "Missing a required roll"
+                obj.unpublished_reason = f"Missing a required roll <a href='{reverse_lazy("b:news:rolls_page", kwargs={"post_slug":obj.slug})}' class='btn btn-info'>Fix</a>"
             elif obj.has_rolls_without_description():
                 obj.unpublished_reason = f"A roll is missing description <a href='{reverse_lazy("b:news:rolls_page", kwargs={"post_slug":obj.slug})}' class='btn btn-info'>Fix</a>"
             else:

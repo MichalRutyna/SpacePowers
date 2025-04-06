@@ -1,4 +1,8 @@
-<button class="btn btn-primary font-weight-bold h2 w-25 m-1">
+<button class="btn btn-primary font-weight-bold h2 w-25 m-1"
+        hx-put="{% url "b:news:new_roll" post.slug "success" %}"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        hx-swap="outerHTML"
+        hx-vals='{"roll_pk": "{{ roll.pk }}"}'>
 
     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
     <svg fill="rgba(var(--bs-emphasis-color-rgb)" width="27px" height="30px" viewBox="0 0 30 32"

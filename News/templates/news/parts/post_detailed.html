@@ -8,8 +8,9 @@
 {# Title no longer links to the post #}
 {% block title_link %}
     <h3 class="card-header">
-        <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span>
+        <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span
     </h3>
+
 {% endblock %}
 
 {# Title now has author #}

@@ -1,5 +1,8 @@
 <li class="secrecy_roll list-group-item">
     {% load choose_bg %}
+    {% if not roll or not description %}
+        <a href="{% url "b:news:rolls_page" post.slug %}">
+    {% endif %}
     <span class="badge {% choose_bg roll %}" id="secrecy_roll">
         {% if roll and description %}
             {{ roll }}
@@ -14,6 +17,9 @@
                   stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </span>
+    {% if not roll and not description %}
+        </a>
+    {% endif %}
     <span class="align-middle ps-1">
         {% if description and roll %}
             {{ description }}
