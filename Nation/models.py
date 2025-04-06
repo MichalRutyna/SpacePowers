@@ -1,7 +1,15 @@
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import QuerySet
 from django.urls.base import reverse
+
+
+def get_user_nations(user) -> QuerySet:
+    nations = user.ownerships.values_list('nation', flat=True)
+    # convert ids to objects
+    nations = Nation.objects.filter(id__in=nations)
+    return nations
 
 
 class Nation(models.Model):
@@ -28,6 +36,7 @@ class Nation(models.Model):
             else:
                 response[field.name] = field.value_to_string(self)
         return response
+
 
     def is_user_an_owner(self, user):
         return self.owners.contains(user)

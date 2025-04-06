@@ -18,17 +18,12 @@ from django.contrib import messages
 from django.apps import apps
 
 from .forms import *
-from .models import Nation, Ownership
+from .models import Nation, Ownership, get_user_nations
 
 import logging
 
 logger = logging.getLogger(__name__)
 
-
-def get_user_nations(user):
-    nations = user.ownerships.values_list('nation', flat=True)
-    nations = Nation.objects.filter(id__in=nations)
-    return nations
 
 
 class NationHomeView(View):
@@ -37,7 +32,7 @@ class NationHomeView(View):
 
     def get(self, request):
         context = {}
-        nations = get_user_nations(request.user)
+        nations = get_user_nations(self.request.user)
         if nations:
             if nations.count() == 1:
                 return redirect('b:nation:details', slug= nations[0].slug)
@@ -52,8 +47,6 @@ class NationHomeView(View):
 class NationDetailView(UserPassesTestMixin, DetailView):
     model = Nation
     template_name = 'nation/details.html'
-
-    errors = []
 
     def test_func(self):
         if self.request.user.is_staff:

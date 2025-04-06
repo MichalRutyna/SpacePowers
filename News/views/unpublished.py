@@ -12,7 +12,7 @@ class UnpublishedListView(ListView):
     allow_empty = True
 
     def get_queryset(self):
-        queryset = Post.objects.filter(is_published=False).order_by('-created_at')
+        queryset = Post.objects.filter(is_published=False, author=self.request.user).order_by('-created_at')
         for obj in queryset:
             if obj.has_unrolled_rolls():
                 obj.unpublished_reason = "Missing a required roll"

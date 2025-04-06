@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Profile | SpacePowers{% endblock %}
+
+{% block content %}
+        <h1> {{ intro }}
+        </h1>
+
+        {% if nation_count %}
+            They control {{ nation_count }} nations:
+            <ul>
+                {% for nation in nations %}
+                    <li>
+                        <a href="{% url "b:nation:details" nation.slug %}">{{ nation.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            They don't control any faction yet!
+        {% endif %}
+        <br>
+{% endblock %}

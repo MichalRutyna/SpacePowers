@@ -172,13 +172,14 @@ STATIC_ROOT = BASE_DIR / 'static/'
 
 STATICFILES_DIRS = [
     'SpacePowers/static',
+    'Map/static'
 ]
 
 UPLOAD_ROOT = (
     BASE_DIR / 'uploads'
 )
 
-UPLOAD_URL = 'static/photos/uploads/'
+UPLOAD_URL = 'static/uploads/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
