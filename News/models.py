@@ -69,6 +69,10 @@ class Post(models.Model):
     def is_liked_by(self, user):
         return self.liked_by.filter(id=user).exists()
 
+    def is_user_an_author(self, user):
+        print(self.author)
+        return self.author == user
+
     def requires_success_roll(self):
         if self.success_roll_override is not None:
             return self.success_roll_override

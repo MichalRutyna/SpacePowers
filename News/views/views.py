@@ -7,9 +7,9 @@ from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.urls.base import reverse_lazy
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
-from News.forms import CommentForm, PostForm
+from News.forms import CommentForm, PostForm, PostEditForm
 from News.models import Post, Category, Comment, Roll
 
 
@@ -41,7 +41,10 @@ class GetPost(DetailView):
         self.object.save()
         self.object.refresh_from_db()
 
-        comments = Comment.objects.annotate(cc=Count("liked_by")).filter(post=self.object, is_published=True).order_by('-cc')
+        context['viewed_by_author'] = self.object.is_user_an_author(self.request.user)
+
+        comments = Comment.objects.annotate(cc=Count("liked_by")).filter(post=self.object, is_published=True).order_by(
+            '-cc')
         paginator = Paginator(comments, 100)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -49,6 +52,7 @@ class GetPost(DetailView):
 
         context['comment_form'] = CommentForm(user=self.request.user)
         return context
+
 
 class AddPostView(UserPassesTestMixin, CreateView):
     def get_form_kwargs(self):
@@ -88,3 +92,31 @@ class AddPostView(UserPassesTestMixin, CreateView):
         if self.object.requires_secrecy_roll():
             Roll(post=self.object, roll_type='secrecy').save()
         return x
+
+
+class EditPostView(UserPassesTestMixin, UpdateView):
+    model = Post
+    template_name = "news/pages/edit_post.html"
+    form_class = PostEditForm
+
+    errors = []
+
+    def test_func(self):
+        allowed = True
+        if not settings.POST_CREATION_ALLOWED:
+            allowed = False
+            self.errors.append('An administrator has disabled post edition.')
+        if not self.request.user.has_perm('News.change_post'):
+            allowed = False
+            self.errors.append('You do not have the permissions!')
+
+        if not self.get_object().is_user_an_author(self.request.user):
+            allowed = False
+            self.errors.append('You are not the author of this post!')
+        return allowed
+
+    def handle_no_permission(self):
+        context = {"error": "forbidden",
+                   "message": "You cannot edit this post:<br>" + self.errors[0]}
+
+        return render(self.request, '403.html', context)

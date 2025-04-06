@@ -8,6 +8,7 @@ app_name = "news"
 urlpatterns = [
     path('',Home.as_view(), name='home'),
     path('create_post/', login_required(AddPostView.as_view()), name='create_post'),
+    path('edit_post/<slug:slug>', login_required(EditPostView.as_view()), name='edit_post'),
 
     # Likes and comments
     path('post/like/<int:pk>/', login_required(like_post), name='like_post'),

@@ -29,8 +29,6 @@ class CommentForm(forms.ModelForm):
 
 class PostForm(forms.ModelForm):
 
-    content = MartorFormField()
-
     class Meta:
         model = Post
         fields = ('title', 'content', 'nation', 'tags')
@@ -59,3 +57,19 @@ class RollsForm(forms.Form):
         self.helper.form_id = 'id-rolls-form'
         self.helper.form_method = 'post'
         self.helper.form_action = ''
+
+class PostEditForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-rolls-form'
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
+        self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))
+
+    class Meta:
+        model = Post
+        fields = ('title', 'content', 'nation', 'tags')

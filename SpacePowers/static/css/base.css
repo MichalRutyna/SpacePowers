@@ -51,3 +51,7 @@ footer {
 .likes:hover {
     filter: brightness(80%);
 }
+
+img {
+    max-width: 100%;
+}

@@ -8,7 +8,10 @@
 {# Title no longer links to the post #}
 {% block title_link %}
     <h3 class="card-header">
-        <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span
+        <span class="text-body">{{ post.title|truncatewords_html:7|safe }}</span>
+        {% if viewed_by_author %}
+            <a class="float-end" href="{% url "b:news:edit_post" post.slug %}"><button class="btn btn-outline-info">Edit</button></a>
+        {% endif %}
     </h3>
 
 {% endblock %}
