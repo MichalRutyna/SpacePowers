@@ -172,13 +172,18 @@ STATIC_ROOT = BASE_DIR / 'static/'
 
 STATICFILES_DIRS = [
     'SpacePowers/static',
+    'uploads',
     'Map/static',
-    'static/images/uploads'
 ]
 
 UPLOAD_ROOT = (
-    BASE_DIR / 'static/uploads/'
+    BASE_DIR / 'uploads/'
 )
+
+UPLOAD_URL = "uploads/"
+
+MEDIA_ROOT = BASE_DIR / 'uploads/'
+MEDIA_URL = "uploads/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -273,7 +278,7 @@ MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
 
 # Upload to locale storage
 import time
-MARTOR_UPLOAD_PATH = BASE_DIR / 'static/uploads/images/{}'.format(time.strftime("%Y/%m/%d/"))
+MARTOR_UPLOAD_PATH = 'images/{}'.format(time.strftime("%Y/%m/%d/"))
 MARTOR_UPLOAD_URL = '/api/uploader/'  # change to local uploader
 
 MAX_IMAGE_UPLOAD_SIZE = 5242880
