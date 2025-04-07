@@ -13,38 +13,38 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     save_as = False
     save_on_top = True
-    list_display = ('id', 'title', 'nation', 'author', 'category',  'created_at', 'is_published')
+    list_display = ('id', 'title', 'nation', 'author', 'category',  'created_at', 'is_published', 'approved_by_admin')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
-    list_filter = ('category', 'tags', 'nation', 'author', 'created_at', 'is_published')
-    readonly_fields = ('views', 'created_at', 'seen_by', 'comments')
+    readonly_fields = ('views', 'created_at', 'edited_at', 'seen_by', 'comments', 'is_published')
+    list_filter = ('category', 'tags', 'nation', 'author', 'created_at',)
     inlines = [RollInLine,]
-    list_editable = ('is_published',)
+    list_editable = ('approved_by_admin',)
     view_on_site = True
 
     fieldsets = [
         (
             None,
             {
-                "fields": ["title", ("author", "nation"), "tags", "content"]
+                "fields": ["title", ("author", "nation"), ("tags", "arcs"), "content"]
             }
         ),
         (
             "Interactions",
             {
-                "fields": ["comments", "liked_by"]
+                "fields": ["comments", "liked_by", 'update_subscribe']
             }
         ),
         (
             "Misc info",
             {
-                "fields": ['seen_by', 'views', 'created_at']
+                "fields": ['seen_by', 'views', 'created_at', 'edited_at', 'edited']
             }
         ),
         (
             "Advanced settings",
             {
-                "fields": ["slug", "category", "is_published", ("success_roll_override", "secrecy_roll_override")],
+                "fields": ["slug", "category", ("is_published", "published_by_user", "approved_by_admin", "published_override"), ("success_roll_override", "secrecy_roll_override"), "active",],
                 "classes": ("collapse",),
             }
         )
@@ -89,5 +89,6 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(Arc)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

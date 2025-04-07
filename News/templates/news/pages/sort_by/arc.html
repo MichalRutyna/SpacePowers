@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{ arc }}{% endblock %}
+
+{% block content %}
+
+
+    <h1 class="text-center">News in the arc {{ arc }}:</h1>
+
+    {% for post in posts %}
+        {% include "news/parts/post_overwiewed.html" %}
+        <br><br>
+    {% endfor %}
+{% endblock %}

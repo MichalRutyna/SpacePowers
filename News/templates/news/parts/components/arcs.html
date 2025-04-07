@@ -1,0 +1,3 @@
+{% for arc in post.arcs.all %}
+    <a href="{{ arc.get_absolute_url }}" class="badge rounded-pill bg-info">{{ tag.title }}</a>
+{% endfor %}

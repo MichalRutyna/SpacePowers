@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.query_utils import Q
 from django.urls import reverse
 from martor.models import MartorField
 
 from Nation.models import Nation
+from managers import NewsManager
 
 
 class Category(models.Model):
@@ -19,6 +21,23 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category(s)'
         verbose_name_plural = 'Categories'
+        ordering = ['title']
+
+
+class Arc(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, verbose_name='Arc_url', unique=True)
+    users = models.ManyToManyField(User, verbose_name='Users')
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('b:news:arc', kwargs={"slug": self.slug})
+
+    class Meta:
+        verbose_name = 'Arc(s)'
+        verbose_name_plural = 'Arcs'
         ordering = ['title']
 
 
@@ -49,18 +68,45 @@ class Post(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Published')
 
+    edited_at = models.DateTimeField(auto_now=True, verbose_name='Edited')
+    edited = models.BooleanField(default=False, verbose_name='Was edited')
+
+    update_subscribe = models.ManyToManyField(User, blank=True, verbose_name='Subscribed', related_name='subscribed_post')
+
     views = models.IntegerField(default=0, verbose_name='Number of views')
     seen_by = models.ManyToManyField(User, blank=True, verbose_name='Seen by', related_name='+')
     liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_posts')
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Tags')
+    arcs = models.ManyToManyField(Arc, blank=True, related_name='posts', verbose_name='Arcs')
 
-    # overrides for requirements
+    # overrides
     success_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Success roll override')
     secrecy_roll_override = models.BooleanField(null=True, blank=True, verbose_name='Secrecy roll override')
+    published_override = models.BooleanField(null=True, blank=True, verbose_name='Published override')
 
-    is_published = models.BooleanField(default=False)
+    published_by_user = models.BooleanField(default=False, verbose_name='Published by user')
+    approved_by_admin = models.BooleanField(default=False, verbose_name='Approved by admin')
+
+    active = models.BooleanField(default=True, verbose_name='Active')
+
+    objects = models.Manager()
+    active_posts = NewsManager()
+
+    @property
+    def is_published(self):
+        if self.published_override is not None:
+            return self.published_override
+        if self.has_unrolled_rolls():
+            return False
+        if self.has_unrolled_rolls():
+            return False
+        if not self.approved_by_admin:
+            return False
+        if not self.published_by_user:
+            return False
+        return True
 
     @property
     def likes(self):
@@ -93,7 +139,7 @@ class Post(models.Model):
         return self.rolls.filter(roll=None).exists()
 
     def has_rolls_without_description(self):
-        return self.rolls.filter(roll_description=None).exists()
+        return self.rolls.filter(Q(roll_description__isnull=True) | Q(roll_description="")).exists()
 
     def __str__(self):
         return self.title
@@ -124,11 +170,19 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', related_query_name='comments', verbose_name='Post')
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, verbose_name='Author')
     nation = models.ForeignKey(Nation, on_delete=models.PROTECT, null=True, verbose_name='Nation')
-    liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_comments')
+
     comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_published = models.BooleanField(default=True)
-    metagame = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created at')
+    edited_at = models.DateTimeField(auto_now=True, verbose_name='Edited')
+    edited = models.BooleanField(default=False, verbose_name='Is edited')
+
+    liked_by = models.ManyToManyField(User, blank=True, verbose_name='Liked by', related_name='liked_comments')
+
+    is_published = models.BooleanField(default=True, verbose_name='Is published')
+    metagame = models.BooleanField(default=False, verbose_name='Metagame')
+
+    active = models.BooleanField(default=True, verbose_name='Active')
 
     @property
     def likes(self):

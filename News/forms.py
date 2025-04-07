@@ -6,7 +6,7 @@ from django.urls.base import reverse_lazy
 
 from Nation.views import get_user_nations
 from Nation.models import Nation
-from .models import Tag, Post, Comment
+from .models import Tag, Post, Comment, Arc
 
 
 class CommentForm(forms.ModelForm):
@@ -43,7 +43,7 @@ class PostForm(forms.ModelForm):
 
         self.fields['nation'].queryset = get_user_nations(user)
 
-        self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
+        self.helper.add_input(Reset('reset', "Clear", css_class="btn-outline-danger"))
         self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))
 
 
@@ -67,9 +67,26 @@ class PostEditForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
 
-        self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
+        self.helper.add_input(Reset('reset', "Reset", css_class="btn-outline-danger"))
         self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))
 
     class Meta:
         model = Post
         fields = ('title', 'content', 'nation', 'tags')
+
+
+class ArcForm(forms.ModelForm):
+
+    class Meta:
+        model = Arc
+        fields = ('title',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-arcs-form'
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
+        self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))

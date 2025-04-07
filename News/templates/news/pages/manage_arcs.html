@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Arcs{% endblock %}
+
+{% block content %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="bg-dark p-2 rounded-2">
+        <div class="p-2">
+            <h1 class="text-center">Your arcs:</h1>
+            <div class="d-flex flex-row" id="arc_list">
+{#                TODO arc list #}
+            </div>
+        </div>
+        <div class="row my-1" >
+{#            TODO buttons#}
+        <button type="button" name="roll" class="btn btn-primary ms-auto me-auto w-25" id="button-id-delete"
+                hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll">Delete</button>
+        </div>
+    </div>
+    <div id="form_area">
+
+    </div>
+
+{% endblock %}

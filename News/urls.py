@@ -17,6 +17,7 @@ urlpatterns = [
 
     # Filters
     path('category/<str:slug>/',PostsByCategory.as_view(), name='category'),
+    path('arc/<str:slug>/',PostsByArc.as_view(), name='arc'),
     path('nation/<str:slug>/',PostsByNation.as_view(), name='nation'),
     path('tag/<str:slug>/', PostsByTag.as_view(), name='tag'),
     path('author/<int:pk>/', PostsByAuthor.as_view(), name='author'),

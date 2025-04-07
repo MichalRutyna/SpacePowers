@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from django.views.generic.list import ListView
 
-from News.models import Post, Tag, Category
+from News.models import Post, Tag, Category, Arc
 from Nation.models import Nation
 
 
@@ -22,6 +22,24 @@ class PostsByCategory(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = get_object_or_404(Category, slug=self.kwargs['slug'])
+
+        return context
+
+class PostsByArc(ListView):
+    template_name = 'news/pages/sort_by/arc.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+    allow_empty = False
+
+    def get_queryset(self):
+        queryset = Post.objects.filter(arc__slug=self.kwargs['slug']).order_by('-created_at')
+        if not queryset.exists():
+            raise Http404("No posts found in this arc.")
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['arc'] = get_object_or_404(Arc, slug=self.kwargs['slug'])
 
         return context
 
