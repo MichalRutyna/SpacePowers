@@ -17,12 +17,12 @@ class Home(ListView):
     model = Post
     template_name = 'news/pages/home.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 10
 
     extra_context = {'post_creation_allowed': settings.POST_CREATION_ALLOWED}
 
     def get_queryset(self):
-        return Post.objects.order_by('-created_at')
+        return Post.active_posts.published()
 
 
 class GetPost(DetailView):

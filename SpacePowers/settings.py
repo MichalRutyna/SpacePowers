@@ -117,7 +117,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'BaseSite.context_processors.get_nation_dropdown'
+                'BaseSite.context_processors.get_nation_dropdown',
+                'BaseSite.context_processors.get_settings_context',
             ],
         },
     },
@@ -333,3 +334,4 @@ MAX_SUCCESS_ROLLS_PER_POST = 3
 MAX_SECRECY_ROLLS_PER_POST = 30
 
 CURRENT_CATEGORY_SLUG = 'season-1'
+MODERATOR_POST_NATION = 'universe'

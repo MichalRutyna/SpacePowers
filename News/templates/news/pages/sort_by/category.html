@@ -8,8 +8,12 @@
 
     <h1 class="text-center">News categorized as {{ category }}:</h1>
 
-    {% for post in posts %}
-        {% include "news/parts/post_overwiewed.html" %}
-        <br><br>
-    {% endfor %}
+    {% if posts %}
+        {% for post in posts %}
+            {% include "news/parts/post_overwiewed.html" %}
+            <br><br>
+        {% endfor %}
+    {% else %}
+        <h2 class="text-warning text-center mt-5">We know nothing from this period</h2>
+    {% endif %}
 {% endblock %}

@@ -116,7 +116,6 @@ class Post(models.Model):
         return self.liked_by.filter(id=user).exists()
 
     def is_user_an_author(self, user):
-        print(self.author)
         return self.author == user
 
     def requires_success_roll(self):

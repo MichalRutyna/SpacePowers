@@ -1,5 +1,3 @@
-from django.db.models.query_utils import Q
-from django.shortcuts import get_list_or_404
 from django.urls.base import reverse_lazy
 from django.views.generic.list import ListView
 

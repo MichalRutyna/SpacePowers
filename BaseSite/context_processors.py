@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse
+from django.conf import settings
 from django.urls.base import reverse_lazy
 
 from Nation.models import Nation
@@ -25,3 +25,6 @@ def get_nation_dropdown(request):
         return {'dropdown': response}
     else:
         return {}
+
+def get_settings_context(request):
+    return {'moderation_post_nation': settings.MODERATOR_POST_NATION}

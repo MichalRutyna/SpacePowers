@@ -8,9 +8,13 @@
 
     <h1 class="text-center">News with {{ tag_object.title }} tag:</h1>
 
-    {% for post in posts %}
-        {% include "news/parts/post_overwiewed.html" %}
-        <br><br>
-    {% endfor %}
+    {% if posts %}
+        {% for post in posts %}
+            {% include "news/parts/post_overwiewed.html" %}
+            <br><br>
+        {% endfor %}
+    {% else %}
+        <h2 class="text-warning text-center mt-5">We lack information about this</h2>
+    {% endif %}
 
 {% endblock %}

@@ -5,11 +5,18 @@
 
 {% block content %}
 
+    {% if nation %}
+        <h1 class="text-center">News from {{ nation }}:</h1>
+    {% else %}
+        <h1 class="text-center">Posts from moderation:</h1>
+    {% endif %}
 
-    <h1 class="text-center">News from {{ nation }}:</h1>
-
-    {% for post in posts %}
-        {% include "news/parts/post_overwiewed.html" %}
-        <br><br>
-    {% endfor %}
+    {% if posts %}
+        {% for post in posts %}
+            {% include "news/parts/post_overwiewed.html" %}
+            <br><br>
+        {% endfor %}
+    {% else %}
+        <h2 class="text-warning text-center mt-5">We didn't hear anything from them</h2>
+    {% endif %}
 {% endblock %}
