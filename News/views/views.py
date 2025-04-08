@@ -120,3 +120,7 @@ class EditPostView(UserPassesTestMixin, UpdateView):
                    "message": "You cannot edit this post:<br>" + self.errors[0]}
 
         return render(self.request, '403.html', context)
+
+    def form_valid(self, form):
+        form.instance.edited = True
+        return super().form_valid(form)

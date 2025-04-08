@@ -68,7 +68,7 @@ class PostEditForm(forms.ModelForm):
         self.helper.form_action = ''
 
         self.helper.add_input(Reset('reset', "Reset", css_class="btn-outline-danger"))
-        self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))
+        self.helper.add_input(Submit('submit', "Edit", css_class='btn-primary'))
 
     class Meta:
         model = Post

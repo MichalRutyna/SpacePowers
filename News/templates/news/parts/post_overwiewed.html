@@ -27,8 +27,8 @@
             {% endblock %}
         </h5>
         <h6 class="card-subtitle">
-            {% include "news/parts/components/tags.html" %}
             {% include "news/parts/components/arcs.html" %}
+            {% include "news/parts/components/tags.html" %}
         </h6>
     </div>
     <div class="card-body">
@@ -53,9 +53,12 @@
     {% block comment_section %}
     {% endblock %}
     <div class="card-footer text-muted">
-                <span class="p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                      data-bs-original-title="{{ post.created_at|date:"d.m.Y G:i" }}">
-                {{ post.created_at|timesince }} ago</span>
+        <span class="py-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              data-bs-original-title="{{ post.created_at|date:"d.m.Y G:i" }}">
+        {{ post.created_at | timesince }} ago</span>
+        {% if post.edited %}
+            <span class="py-1">(edited {{ post.edited_at | timesince }} ago)</span>
+        {% endif %}
     </div>
 
 </div>

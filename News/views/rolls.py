@@ -20,6 +20,7 @@ class RollsPageView(UserPassesTestMixin, View):
 
     errors = []
     def test_func(self):
+        # TODO auth
         return True
 
     def get(self, *args, **kwargs):
@@ -36,11 +37,6 @@ class RollsPageView(UserPassesTestMixin, View):
         }
 
         return render(self.request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-        # TODO handle post
-        return HttpResponse("")
 
 def make_random_roll():
     return random.randint(1, 20)
@@ -103,7 +99,7 @@ class DescriptionView(UserPassesTestMixin, View):
             'post_slug': self.kwargs['post_slug'],
             'roll': get_object_or_404(Roll, pk=self.kwargs['roll_pk']),
         }
-        return render(self.request, "news/parts/roll_description_form.html", context)
+        return render(self.request, "news/parts/components/roll_description_form.html", context)
 
     def post(self, *args, **kwargs):
         roll = get_object_or_404(Roll, pk=self.kwargs['roll_pk'])

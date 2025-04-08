@@ -23,12 +23,16 @@ urlpatterns = [
     path('author/<int:pk>/', PostsByAuthor.as_view(), name='author'),
     path('search/',Search.as_view(), name='search'),
 
-    # Unpublished
     path('unpublished/', login_required(UnpublishedListView.as_view()), name='unpublished'),
-    # Rolls
     path('post/<str:post_slug>/rolls', login_required(RollsPageView.as_view()), name='rolls_page'),
+    path('arcs/', login_required(ArcsPageView.as_view()), name='arcs_page'),
+
+    # Rolls api
     path('post/<str:post_slug>/new_roll/<str:roll_type>', login_required(NewRollView.as_view()), name='new_roll'),
     path('post/<str:post_slug>/roll/<int:roll_pk>/description', login_required(DescriptionView.as_view()), name='description'),
+
+    # Arcs api
+    path('arcs/<str:slug>', login_required(ArcManageAPI.as_view()), name='arc_details'),
 
     path('post/<str:slug>/', GetPost.as_view(), name='post'),
 ]

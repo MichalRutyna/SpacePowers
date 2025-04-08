@@ -33,10 +33,7 @@ class PostsByArc(ListView):
     allow_empty = True
 
     def get_queryset(self):
-        queryset = Post.active_posts.published().filter(arc__slug=self.kwargs['slug']).order_by('-created_at')
-        if not queryset.exists():
-            raise Http404("No posts found in this arc.")
-        return queryset
+        return [p for p in Post.active_posts.published() if p.arcs.exists() and p.arcs.filter(slug=self.kwargs['slug']).exists()]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
