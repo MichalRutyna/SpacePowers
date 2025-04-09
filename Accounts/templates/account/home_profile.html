@@ -7,6 +7,7 @@
     </h1>
 
     <a href="{% url "b:news:unpublished" %}" class="btn btn-primary btn-lg my-3">Unpublished posts</a>
+    <a href="{% url "b:news:arcs_page" %}" class="btn btn-primary btn-lg my-3">Your arcs</a>
 
     <br>
     You've been with us since {{ user.date_joined|date:"d.m.Y G:i" }}! <br>

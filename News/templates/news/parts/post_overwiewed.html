@@ -27,8 +27,8 @@
             {% endblock %}
         </h5>
         <h6 class="card-subtitle">
-            {% include "news/parts/components/arcs.html" %}
-            {% include "news/parts/components/tags.html" %}
+            {% include "news/parts/components/posts/arcs.html" %}
+            {% include "news/parts/components/posts/tags.html" %}
         </h6>
     </div>
     <div class="card-body">
@@ -43,10 +43,10 @@
     <div class="card-body likes_comments">
         {% likes_post user.id post as likes_post %}
         {% with target='b:news:like_post' index=post.pk likes=post.likes %}
-            {% include "news/parts/components/like_count.html" %}
+            {% include "news/parts/components/posts/like_count.html" %}
         {% endwith %}
         |
-        {% include "news/parts/components/comments_count.html" %}
+        {% include "news/parts/components/posts/comments_count.html" %}
 
     </div>
 

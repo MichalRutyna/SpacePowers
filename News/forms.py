@@ -31,7 +31,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('title', 'content', 'nation', 'tags')
+        fields = ('title', 'content', 'nation', 'tags', 'arcs')
 
 
     def __init__(self, *args, user=None, **kwargs):
@@ -72,7 +72,7 @@ class PostEditForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('title', 'content', 'nation', 'tags')
+        fields = ('title', 'content', 'nation', 'tags', 'arcs')
 
 
 class ArcForm(forms.ModelForm):
@@ -88,5 +88,5 @@ class ArcForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = ''
 
-        self.helper.add_input(Reset('reset', "Cancel", css_class="btn-outline-danger"))
-        self.helper.add_input(Submit('submit', "Post", css_class='btn-primary'))
+        self.helper.add_input(Reset('reset', "Reset", css_class="btn-outline-danger"))
+        self.helper.add_input(Submit('submit', "Edit", css_class='btn-primary'))

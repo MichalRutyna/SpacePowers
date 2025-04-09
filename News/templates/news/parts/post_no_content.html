@@ -11,7 +11,7 @@
     <div class="card-body">
         <h5 class="card-title m-0">
             <a href="{{ post.nation.get_news_url }}">{{ post.nation|truncatewords_html:7 }}</a>
-            {% include "news/parts/components/tags.html" %}
+            {% include "news/parts/components/posts/tags.html" %}
             {% block reason %}
             {% endblock %}
         </h5>

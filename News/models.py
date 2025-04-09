@@ -26,7 +26,7 @@ class Category(models.Model):
 
 class Arc(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, verbose_name='Arc_url', unique=True)
+    slug = models.SlugField(max_length=255, verbose_name='Slug', unique=True)
     users = models.ManyToManyField(User, verbose_name='Users')
 
     def __str__(self):

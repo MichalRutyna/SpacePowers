@@ -1,0 +1,10 @@
+<div class="m-3 d-flex flex justify-content-center">
+    <button class="btn btn-danger mx-1"
+            hx-delete="{% url "b:news:arc_details" arc.slug %}"
+            hx-swap="none"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-confirm='You are about to delete an arc. This cannot be undone. Are you sure?'>
+        Delete
+    </button>
+    <button class="btn btn-info mx-1" disabled>Invite a user (Coming soon)</button>
+</div>

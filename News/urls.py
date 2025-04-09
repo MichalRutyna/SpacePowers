@@ -17,7 +17,7 @@ urlpatterns = [
 
     # Filters
     path('category/<str:slug>/',PostsByCategory.as_view(), name='category'),
-    path('arc/<str:slug>/',PostsByArc.as_view(), name='arc'),
+    path('from_arc/<str:slug>/',PostsByArc.as_view(), name='arc'),
     path('nation/<str:slug>/',PostsByNation.as_view(), name='nation'),
     path('tag/<str:slug>/', PostsByTag.as_view(), name='tag'),
     path('author/<int:pk>/', PostsByAuthor.as_view(), name='author'),
@@ -32,6 +32,7 @@ urlpatterns = [
     path('post/<str:post_slug>/roll/<int:roll_pk>/description', login_required(DescriptionView.as_view()), name='description'),
 
     # Arcs api
+    path('arcs/new_arc', login_required(ArcAddAPI.as_view()), name='new_arc'),
     path('arcs/<str:slug>', login_required(ArcManageAPI.as_view()), name='arc_details'),
 
     path('post/<str:slug>/', GetPost.as_view(), name='post'),

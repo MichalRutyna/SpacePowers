@@ -23,7 +23,7 @@
                     <div class="card-footer text-muted">
 
                         {% with target='b:news:like_comment' index=comment.pk likes=comment.likes %}
-                            {% include "news/parts/components/like_count.html" %}
+                            {% include "news/parts/components/posts/like_count.html" %}
                         {% endwith %}
                         <span class="float-end p-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                               data-bs-original-title="{{ comment.created_at|date:"d.m.Y G:i" }}">

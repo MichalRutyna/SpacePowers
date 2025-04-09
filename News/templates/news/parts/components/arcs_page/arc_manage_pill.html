@@ -1,6 +1,6 @@
 <button class="rounded-pill btn btn-info hover_darken_content text-center h2 w-25 m-1"
-{#        hx-get="{% url "b:news:description" post.slug roll.pk %}"#}
-{#        hx-target="#description_form"#}
+        hx-get="{% url "b:news:arc_details" arc.slug %}"
+        hx-target="#form_area"
         >
     {{arc.title}}
 </button>

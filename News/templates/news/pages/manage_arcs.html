@@ -8,7 +8,7 @@
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -18,18 +18,15 @@
             <h1 class="text-center">Your arcs:</h1>
             <div class="d-flex flex-row" id="arc_list">
                 {% for arc in arcs %}
-                    {% include "news/parts/components/arc_manage_pill.html" %}
+                    {% include "news/parts/components/arcs_page/arc_manage_pill.html" %}
                 {% endfor %}
+            {% include "news/parts/components/arcs_page/additional_arc_pill.html" %}
             </div>
-        </div>
-        <div class="row my-1" >
-{#            TODO buttons#}
-        <button type="button" name="roll" class="btn btn-primary ms-auto me-auto w-25" id="button-id-delete"
-                hx-get="/news/random_roll" hx-swap="outerHTML" hx-target="#div_id_roll">Delete</button>
         </div>
     </div>
     <div id="form_area">
 
     </div>
+
 
 {% endblock %}

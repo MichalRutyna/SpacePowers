@@ -99,7 +99,7 @@ class DescriptionView(UserPassesTestMixin, View):
             'post_slug': self.kwargs['post_slug'],
             'roll': get_object_or_404(Roll, pk=self.kwargs['roll_pk']),
         }
-        return render(self.request, "news/parts/components/roll_description_form.html", context)
+        return render(self.request, "news/parts/components/../templates/news/parts/roll_description_form.html", context)
 
     def post(self, *args, **kwargs):
         roll = get_object_or_404(Roll, pk=self.kwargs['roll_pk'])

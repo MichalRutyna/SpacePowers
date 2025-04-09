@@ -1,0 +1,21 @@
+{% load crispy_forms_tags %}
+<style>
+    .asteriskField {
+        display: none;
+    }
+</style>
+<div class="bg-dark p-2 rounded-2 mt-5">
+    <form id="id-rolls-form"
+      hx-post="{% url "b:news:arc_details" arc.slug %}">
+        {% csrf_token %}
+
+        <div class="d-flex justify-content-center">
+            <p class="rounded-pill bg-info hover_darken_content text-center w-50 py-3">
+                {{arc.title}}
+            </p>
+        </div>
+       {% crispy form %}
+    </form>
+
+    {% include "news/parts/components/arcs_page/buttons_row.html" %}
+</div>

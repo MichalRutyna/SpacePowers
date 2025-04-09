@@ -37,7 +37,7 @@
         {% if post.requires_success_roll %}
             {% for roll in post.get_success_rolls %}
                 {% with roll=roll.roll description=roll.roll_description %}
-                    {% include "news/parts/components/success_roll.html" %}
+                    {% include "news/parts/components/posts/success_roll.html" %}
                 {% endwith %}
             {% endfor %}
         {% endif %}
@@ -45,7 +45,7 @@
         {% if post.requires_secrecy_roll %}
             {% for roll in post.get_secrecy_rolls %}
                 {% with roll=roll.roll description=roll.roll_description %}
-                    {% include "news/parts/components/secrecy_roll.html" %}
+                    {% include "news/parts/components/posts/secrecy_roll.html" %}
                 {% endwith %}
             {% endfor %}
         {% endif %}
@@ -54,5 +54,5 @@
 
 {# include comment section #}
 {% block comment_section %}
-    {% include 'news/parts/components/comment_section.html' %}
+    {% include 'news/parts/components/posts/comment_section.html' %}
 {% endblock %}
