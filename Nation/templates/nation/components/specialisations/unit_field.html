@@ -1,6 +1,5 @@
 {% extends "nation/components/editable_deletable_field.html" %}
 
 {% block field_text %}
-    - Unit {{ unit.name }} - {{ unit.size }} troops, each costing
-                            {{ unit.upkeep_per_unit }} <br>
+    {% include "nation/components/field_texts/unit.html" %}
 {% endblock %}

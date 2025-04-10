@@ -15,8 +15,22 @@
         <div class="border-top p-3 bg-dark my-4">
 
             {% autoescape off %}
+                {% if nation.banner %}
+                    <img style="height: 15rem; width: 100%" src="{{ nation.banner.url }}" alt="Nation banner">
+                {% endif %}
+
+                <h2 class="text-center text-body bg-primary d-flex "
+                    style="position:relative; min-height: 5rem;">
+                    {% if nation.flag %}
+                        <img class="me-auto p-2" style="max-height: 3em;" src="{{ nation.flag.url }}" alt="Nation flag">
+                    {% endif %}
+                    <a href="{% url 'b:nation:details' nation.slug %}" class="text-center align-self-center text-body link-underline-info link-underline-opacity-50-hover" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" >{{ nation.name }}</a>
+                    {% if nation.coat_of_arms %}
+                        <img class="ms-auto p-2" style="max-height: 3em;" src="{{ nation.coat_of_arms.url }}" alt="Nation coat of arms">
+                    {% endif %}
+                </h2>
+
                 <h1 class="text-center">Glory to our {% owner_title nation request.user %}!</h1>
-                <a href="{% url 'b:nation:details' nation.slug %}" class="link-underline-info link-underline-opacity-50-hover"><h2 class="text-center text-body bg-primary">{{ nation.name }}</h2></a>
                 {% if not nation.active %}
                     <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
                         administrator</h2>

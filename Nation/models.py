@@ -18,8 +18,12 @@ class Nation(models.Model):
     slug = models.SlugField(max_length=255, verbose_name='nation_url', unique=True)
     active = models.BooleanField(default=False)
 
-    population = models.PositiveIntegerField(default=0, verbose_name='Population', validators=[MinValueValidator(1, message='Population must be greater than 0')])
-    PKB = models.PositiveIntegerField(default=0, verbose_name='PKB', validators=[MinValueValidator(1, message='PKB must be greater than 0')])
+    banner = models.ImageField(null=True, blank=True, verbose_name='Banner', upload_to="banners/")
+    flag = models.ImageField(null=True, blank=True, verbose_name='Flag', upload_to="flags/")
+    coat_of_arms = models.ImageField(null=True, blank=True, verbose_name='Coat of Arms', upload_to="coats_of_arms/")
+
+    population = models.PositiveIntegerField(default=0, blank=True, verbose_name='Population', validators=[MinValueValidator(1, message='Population must be greater than 0')])
+    PKB = models.PositiveIntegerField(default=0, blank=True, verbose_name='PKB', validators=[MinValueValidator(1, message='PKB must be greater than 0')])
 
     def get_name_foreign(self):
         # proof of concept for accessing data from other nations
@@ -36,7 +40,6 @@ class Nation(models.Model):
             else:
                 response[field.name] = field.value_to_string(self)
         return response
-
 
     def is_user_an_owner(self, user):
         return self.owners.contains(user)

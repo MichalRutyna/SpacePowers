@@ -1,5 +1,5 @@
 {% extends "nation/components/editable_deletable_field.html" %}
 
 {% block field_text %}
-    Army <strong>{{ army.name }}</strong> of {{ army.nation }}:
+    {% include "nation/components/field_texts/armies.html" %}
 {% endblock %}

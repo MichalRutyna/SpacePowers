@@ -1,4 +1,4 @@
 {% extends "nation/components/editable_field.html" %}
 {% block field_text %}
-    PKB: {{ nation.PKB }}
+    {% include "nation/components/field_texts/pkb.html" %}
 {% endblock %}

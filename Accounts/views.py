@@ -65,11 +65,12 @@ class ProfileView(UserPassesTestMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         context.update({"signup_allowed": settings.SIGNUP_ALLOWED,
+                        'max_nation_count': settings.MAX_NATIONS_PER_USER,
+                        'nation_creation_allowed': settings.NATION_CREATION_ALLOWED,
                         'intro': self.get_owner_titles(),
                         'nation_count': self.get_controlled_nation_count(),
                         'nations': get_user_nations(self.requested_user),
-                        'max_nation_count': settings.MAX_NATIONS_PER_USER,
-                        'nation_creation_allowed': settings.NATION_CREATION_ALLOWED,
+                        'requested_user': self.requested_user,
                         })
         return context
 

@@ -43,8 +43,7 @@ class NationHomeView(View):
             context['nation_creation_enabled'] = (settings.NATION_CREATION_ALLOWED and self.request.user.has_perm('Nation.add_nation')) or self.request.user.is_staff
             return render(request, self.missing_nation_template, context=context)
 
-
-class NationDetailView(UserPassesTestMixin, DetailView):
+class NationDetailView(DetailView):
     model = Nation
     template_name = 'nation/details.html'
 
@@ -62,7 +61,31 @@ class NationDetailView(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['edition_allowed'] = (settings.NATION_EDITION_ALLOWED and self.request.user.has_perm(
+            'Nation.change_nation')) or self.request.user.is_staff
+        context['owner_title'] = self.object.get_title_of_user(self.request.user)
+        return context
+
+class NationEditView(UserPassesTestMixin, DetailView):
+    model = Nation
+    template_name = 'nation/edit_page.html'
+
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+
+        allowed = True
+        if not self.get_object().is_user_an_owner(self.request.user):
+            allowed = False
+        return allowed
+
+    def handle_no_permission(self):
+        return redirect(reverse_lazy('b:other_nations:nation_details', kwargs={'slug': self.get_object().slug}))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['edition_allowed'] = (settings.NATION_EDITION_ALLOWED and self.request.user.has_perm('Nation.change_nation')) or self.request.user.is_staff
+        context['owner_title'] = self.object.get_title_of_user(self.request.user)
         return context
 
 

@@ -6,28 +6,25 @@ from Nation.models import Nation, Army
 
 
 class CreateNationForm(forms.ModelForm):
-    name = forms.CharField(
-        label="Nation's Name",
-        required=True,
-        help_text="Other people will see that"
-    )
     owner_title = forms.CharField(
         label="How do you want to be titled?",
         required=False,
         help_text="Defaults to glorious leader"
     )
-    population = forms.IntegerField(
-        label="Initial population",
-        required=False,
-    )
-    PKB = forms.IntegerField(
-        label="PKB",
-        required=False,
-    )
 
     class Meta:
         model = Nation
-        fields = ['name', 'population', 'PKB']
+        fields = ['name', 'owner_title', 'banner', 'flag', 'coat_of_arms', 'population', 'PKB']
+        labels = {
+            "name": "Nation's Name",
+            "population": "Initial population",
+        }
+        help_texts = {
+            "name": "Other people will see that",
+            "banner": "Roughly 3:16 ratio, cropped from the middle",
+            "flag": "Any ratio should work fine",
+            "coat_of_arms": "Any ratio should work fine",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -6,6 +6,8 @@
         <h1> {{ intro }}
         </h1>
 
+        <a href="{% url "b:news:author" requested_user.pk %}" class="btn btn-primary btn-lg my-3">Their posts</a> <br>
+
         {% if nation_count %}
             They control {{ nation_count }} nations:
             <ul>

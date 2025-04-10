@@ -13,38 +13,73 @@
     <div class="border-top p-3 bg-dark my-4">
 
         {% autoescape off %}
-            <h1 class="text-center">Glory to our {{ nation.owner_title }}!</h1>
-            <h2 class="text-center text-body bg-primary">{{ nation.name }}</h2>
+
+            {% if nation.banner %}
+                    <img style="height: 15vw; width: 100%; object-fit: cover;" src="{{ nation.banner.url }}" alt="Nation banner">
+                {% endif %}
+
+            <h2 class="text-center text-body bg-primary d-flex"
+            style="position:relative; min-height: 5rem;">
+
+                {% if nation.flag %}
+                        <img class="me-auto p-2" style="max-height: 3em;" src="{{ nation.flag.url }}" alt="Nation flag">
+                    {% endif %}
+                <span class="text-center align-self-center" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" >{{ nation.name }}</span>
+                {% if nation.coat_of_arms %}
+                        <img class="ms-auto p-2" style="max-height: 3em;" src="{{ nation.coat_of_arms.url }}" alt="Nation coat of arms">
+                    {% endif %}
+            </h2>
+
+
+
             {% if not nation.active %}
                 <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an
                     administrator</h2>
             {% endif %}
-            {% with field_slugs='["PKB"]' model_slug='nation' instance_pk=nation.pk %}
-                {% include "nation/components/specialisations/pkb_field.html" %}
-            {% endwith %}
+            <div class="rounded-3" style="background-color: #1b1b1b">
+                <h1 class="text-center">
+                    <span class="text-center align-self-center">Glory to our {{ owner_title }}!</span>
+                </h1>
+                <div class="d-flex align-items-center border-top">
+                    <a href="{% url "b:news:nation" nation.slug %}" class="m-2 me-auto">
+                        <button class="btn btn-lg btn-primary object-fit-fill">
+                            Posts
+                        </button>
+                    </a>
+                    <a href="{% url "b:news:nation" nation.slug %}" class="ms-auto m-2">
+                        <button class="btn btn-lg btn-outline-warning m-1 hover_darken_content">
+                            <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                            <svg width="17px" height="22px" viewBox="-1 5 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                                      stroke="rgba(var(--bs-warning-rgb)" stroke-width="1.5" stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                                <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                                      stroke="rgba(var(--bs-warning-rgb)" stroke-width="1.5" stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                    </a>
 
-            {% with field_slugs='["population"]' model_slug='nation' instance_pk=nation.pk %}
-                {% include "nation/components/specialisations/population_field.html" %}
-            {% endwith %}
+                </div>
+            </div>
+
+            <h2 class="text-info text-center mt-4">Stats:</h2>
+
+            {% include "nation/components/field_texts/pkb.html" %}
+            <br>
+            {% include "nation/components/field_texts/population.html" %}
 
             <h2 class="text-danger text-center mt-4">Combat forces:</h2>
+            {% if not nation.armies.all %}
+                <h2 class="text-center">We currently don't have any</h2>
+            {% endif %}
             {% for army in nation.armies.all %}
-                {% with field_slugs='["name"]' model_slug='army' instance_pk=army.pk %}
-                    {% include "nation/components/specialisations/armies_field.html" %}
-                {% endwith %}
+                {% include "nation/components/field_texts/armies.html" %}
                 {% for unit in army.units.all %}
-                    {% with field_slugs='["name", "size", "upkeep_per_unit"]' model_slug='unit' instance_pk=unit.pk %}
-                        {% include "nation/components/specialisations/unit_field.html" %}
-                    {% endwith %}
+                    {% include "nation/components/field_texts/unit.html" %}
                 {% endfor %}
-                {% with field_slugs='["name", "size", "upkeep_per_unit"]' model_slug='unit' parent_model_slug="army" parent_pk=army.pk %}
-                    {% include "nation/components/create_field.html" %}
-                {% endwith %}
                 <br><br>
             {% endfor %}
-            {% with field_slugs='["name"]' model_slug='army' parent_model_slug="nation" parent_pk=nation.pk %}
-                {% include "nation/components/create_field.html" %}
-            {% endwith %}
             </div>
 
         {% endautoescape %}

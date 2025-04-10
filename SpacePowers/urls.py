@@ -14,7 +14,7 @@ urlpatterns = ([
     path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
     path('', include("BaseSite.urls", namespace='b')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 
 if settings.DEBUG:
     urlpatterns = [

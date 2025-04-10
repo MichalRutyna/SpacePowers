@@ -1,5 +1,5 @@
 {% extends "nation/components/editable_field.html" %}
 
 {% block field_text %}
-    Population: {{ nation.population }}
+    {% include "nation/components/field_texts/population.html" %}
 {% endblock %}

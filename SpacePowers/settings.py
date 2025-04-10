@@ -68,7 +68,7 @@ SECRET_KEY = "saddsdad32nionf09409ms"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -328,7 +328,7 @@ POST_EDITION_ALLOWED = True
 
 NATION_CREATION_ALLOWED = True
 NATION_EDITION_ALLOWED = False
-MAX_NATIONS_PER_USER = 2
+MAX_NATIONS_PER_USER = 4
 
 MAX_SUCCESS_ROLLS_PER_POST = 3
 MAX_SECRECY_ROLLS_PER_POST = 30
