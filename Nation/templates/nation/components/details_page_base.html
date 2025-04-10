@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ nation.name }}{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="border-top p-3 bg-dark my-4">
+
+        {% autoescape off %}
+
+            {% if nation.banner %}
+                    <img style="height: 15vw; width: 100%; object-fit: cover;" src="{{ nation.banner.url }}" alt="Nation banner">
+            {% endif %}
+
+            <h2 class="text-center text-body bg-primary d-flex"
+            style="position:relative; min-height: 5rem;">
+
+                {% if nation.flag %}
+                        <img class="me-auto p-2" style="max-height: 3em;" src="{{ nation.flag.url }}" alt="Nation flag">
+                    {% endif %}
+                <span class="text-center align-self-center" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" >{{ nation.name }}</span>
+                {% if nation.coat_of_arms %}
+                        <img class="ms-auto p-2" style="max-height: 3em;" src="{{ nation.coat_of_arms.url }}" alt="Nation coat of arms">
+                    {% endif %}
+            </h2>
+
+            {% block buttons %}
+            {% endblock %}
+
+            {% block stats %}
+            {% endblock %}
+        </div>
+
+        {% endautoescape %}
+
+
+{% endblock %}

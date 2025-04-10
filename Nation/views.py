@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http.request import QueryDict
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls.base import reverse_lazy, reverse
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
@@ -86,6 +86,7 @@ class NationEditView(UserPassesTestMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['edition_allowed'] = (settings.NATION_EDITION_ALLOWED and self.request.user.has_perm('Nation.change_nation')) or self.request.user.is_staff
         context['owner_title'] = self.object.get_title_of_user(self.request.user)
+        context['ownership'] = get_object_or_404(Ownership, user=self.request.user, nation=self.get_object())
         return context
 
 
@@ -156,6 +157,8 @@ class ModelFieldEndpoint(UserPassesTestMixin, View):
         model = apps.get_model(app_label='Nation', model_name=self.request.GET['model_slug'])
         instance = model.objects.get(pk=self.request.GET['instance_pk'])
 
+        cancel_url = reverse_lazy("b:nation:edit_page", kwargs={"slug": self.kwargs['nation_slug']})
+
         ans = '<span class="me-auto my-auto align-middle">'
         for field in fields:
             field_value = getattr(instance, field)
@@ -187,7 +190,7 @@ class ModelFieldEndpoint(UserPassesTestMixin, View):
                       />
                     </svg>
                 </button>
-                <a href={reverse_lazy("b:nation:details", kwargs={"slug": self.kwargs['nation_slug']})}>
+                <a href={cancel_url}>
                     <button class="btn btn-outline-danger m-1 hover_darken_content" type="button">
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                         <svg fill="#d9534f" width="17px" height="21px" viewBox="0 4 96 96" xmlns="http://www.w3.org/2000/svg">

@@ -66,7 +66,7 @@ class Nation(models.Model):
 class Ownership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ownerships')
     nation = models.ForeignKey(Nation, on_delete=models.CASCADE)
-    owner_title = models.CharField(max_length=100, unique=False, null=False, default='glorious leader')
+    owner_title = models.CharField(max_length=100, unique=False, null=False, default='glorious leader', verbose_name="Title")
 
     class Meta:
         constraints = [

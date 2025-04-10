@@ -4,8 +4,8 @@
           hx-vals='{"field_slugs": {{ field_slugs }}, "model_slug": "{{ model_slug }}", "instance_pk": "{{ instance_pk }}"}'>
     {% csrf_token %}
 {% endif %}
-<div class='border-bottom d-flex' id="editable">
-    <span class="me-auto my-auto align-middle">
+<div class='border-bottom d-flex p-1' id="editable">
+    <span class="me-auto align-middle">
         {% block field_text %}
         {% endblock %}
     </span>
