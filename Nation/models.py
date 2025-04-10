@@ -47,7 +47,10 @@ class Nation(models.Model):
     def get_title_of_user(self, user):
         return self.ownership_set.get(user=user).owner_title
 
+    # backwards compatibility
     def get_details_url(self):
+        return reverse("b:nation:details", kwargs={"slug": self.slug})
+    def get_absolute_url(self):
         return reverse("b:nation:details", kwargs={"slug": self.slug})
 
     def get_news_url(self):

@@ -1,51 +1,4 @@
-{#{% extends "base.html" %}#}
-{##}
-{#{% block title %}{{ nation.name }}{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#    {% if messages %}#}
-{#        <ul class="messages">#}
-{#            {% for message in messages %}#}
-{#                <li{% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#    {% endif %}#}
-{#    <div class="border-top p-3 bg-dark my-4">#}
-{##}
-{#        {% autoescape off %}#}
-{##}
-{#            {% if nation.banner %}#}
-{#                    <img style="height: 15vw; width: 100%; object-fit: cover;" src="{{ nation.banner.url }}" alt="Nation banner">#}
-{#            {% endif %}#}
-{##}
-{#            <h2 class="text-center text-body bg-primary d-flex"#}
-{#            style="position:relative; min-height: 5rem;">#}
-{##}
-{#                {% if nation.flag %}#}
-{#                        <img class="me-auto p-2" style="max-height: 3em;" src="{{ nation.flag.url }}" alt="Nation flag">#}
-{#                    {% endif %}#}
-{#                <span class="text-center align-self-center" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" >{{ nation.name }}</span>#}
-{#                {% if nation.coat_of_arms %}#}
-{#                        <img class="ms-auto p-2" style="max-height: 3em;" src="{{ nation.coat_of_arms.url }}" alt="Nation coat of arms">#}
-{#                    {% endif %}#}
-{#            </h2>#}
-{##}
-{#            <h1 class="text-center">#}
-{#                <span class="text-center align-self-center">Glory to our {{ owner_title }}!</span>#}
-{#            </h1>#}
-{##}
-{#            {% if not nation.active %}#}
-{#                <h2 class="text-danger text-center">Your faction is not active! It needs to be verified by an#}
-{#                    administrator</h2>#}
-{#            {% endif %}#}
-{#            #}
-{#            </div>#}
-{##}
-{#        {% endautoescape %}#}
-{##}
-{##}
-{#{% endblock %}#}
-{% extends "nation/components/details_page_base.html" %}
+ {% extends "nation/components/details_page_base.html" %}
 
 {% block buttons %}
     <div class="rounded-3" style="background-color: #1b1b1b">
@@ -55,7 +8,12 @@
         {% endwith %}
 
         </h3>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-start">
+            <a href="{% url "b:nation:edit_form" nation.slug %}">
+                <button class="btn btn-lg btn-outline-info m-1 hover_darken_content">
+                    Edit images
+                </button>
+            </a>
             <a href="{% url "b:nation:details" nation.slug %}" class="m-2 ms-auto">
                 <button class="btn btn-lg btn-outline-success m-1 hover_darken_content">
                     <svg fill="rgba(var(--bs-success-rgb)" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

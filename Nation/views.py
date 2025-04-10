@@ -6,9 +6,10 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http.request import QueryDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls.base import reverse_lazy, reverse
+from django.views.generic import FormView
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
@@ -90,9 +91,27 @@ class NationEditView(UserPassesTestMixin, DetailView):
         return context
 
 
+class NationEditFormView(UserPassesTestMixin, UpdateView):
+    form_class = NationEditForm
+    template_name = 'nation/edit_form.html'
+    model = Nation
+
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+
+        allowed = True
+        object = get_object_or_404(Nation, slug=self.kwargs['slug'])
+        if not object.is_user_an_owner(self.request.user):
+            allowed = False
+        return allowed
+
+    def handle_no_permission(self):
+        return redirect(reverse_lazy('b:other_nations:nation_details', kwargs={'slug': self.kwargs['slug']}))
+
 
 class NationCreateView(UserPassesTestMixin, CreateView):
-    form_class = CreateNationForm
+    form_class = NationCreateForm
     template_name = 'nation/create_nation.html'
     success_url = reverse_lazy("b:nation:home")
 

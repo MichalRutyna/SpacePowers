@@ -5,7 +5,7 @@ from crispy_forms.layout import Submit
 from Nation.models import Nation, Army
 
 
-class CreateNationForm(forms.ModelForm):
+class NationCreateForm(forms.ModelForm):
     owner_title = forms.CharField(
         label="How do you want to be titled?",
         required=False,
@@ -33,3 +33,26 @@ class CreateNationForm(forms.ModelForm):
         self.helper.form_method = 'post'
 
         self.helper.add_input(Submit('submit', 'Create nation!'))
+
+
+class NationEditForm(forms.ModelForm):
+    class Meta:
+        model = Nation
+        fields = ['name', 'banner', 'flag', 'coat_of_arms']
+        labels = {
+            "name": "Nation's name",
+        }
+        help_texts = {
+            "name": "Other people will see that",
+            "banner": "Roughly 3:16 ratio, cropped from the middle",
+            "flag": "Any ratio should work fine",
+            "coat_of_arms": "Any ratio should work fine",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-nation-edit-form'
+        self.helper.form_method = 'post'
+
+        self.helper.add_input(Submit('submit', 'Save edit'))
